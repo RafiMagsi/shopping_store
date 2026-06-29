@@ -1,30 +1,7 @@
 import 'dart:math' as math;
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/utils/responsive.dart';
-
-// ── Film grain overlay ─────────────────────────────────────────────────────
-class _GrainPainter extends CustomPainter {
-  final int seed;
-  const _GrainPainter(this.seed);
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final rng = math.Random(seed * 31 + 7);
-    final paint = Paint()..color = Colors.white.withOpacity(0.017);
-    for (int i = 0; i < 1800; i++) {
-      canvas.drawCircle(
-        Offset(rng.nextDouble() * size.width, rng.nextDouble() * size.height),
-        rng.nextDouble() * 0.9,
-        paint,
-      );
-    }
-  }
-
-  @override
-  bool shouldRepaint(_GrainPainter old) => old.seed != seed;
-}
 
 // ── Hero Banner ────────────────────────────────────────────────────────────
 class HeroBanner extends StatefulWidget {
@@ -59,22 +36,24 @@ class _HeroBannerState extends State<HeroBanner> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 3400),
     )..repeat();
 
-    _autoPlay = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 5000),
-    )..addStatusListener((s) {
-        if (s == AnimationStatus.completed && mounted) {
-          final next = (_page + 1) % widget.slides.length;
-          _pageCtrl.animateToPage(
-            next,
-            duration: const Duration(milliseconds: 900),
-            curve: Curves.easeInOutCubic,
-          );
-          _autoPlay.reset();
-          _autoPlay.forward();
-        }
-      })
-      ..forward();
+    _autoPlay =
+        AnimationController(
+            vsync: this,
+            duration: const Duration(milliseconds: 5000),
+          )
+          ..addStatusListener((s) {
+            if (s == AnimationStatus.completed && mounted) {
+              final next = (_page + 1) % widget.slides.length;
+              _pageCtrl.animateToPage(
+                next,
+                duration: const Duration(milliseconds: 900),
+                curve: Curves.easeInOutCubic,
+              );
+              _autoPlay.reset();
+              _autoPlay.forward();
+            }
+          })
+          ..forward();
   }
 
   @override
@@ -114,14 +93,16 @@ class _HeroBannerState extends State<HeroBanner> with TickerProviderStateMixin {
 
             // Slide progress bar
             Positioned(
-              top: 0, left: 0, right: 0,
+              top: 0,
+              left: 0,
+              right: 0,
               child: AnimatedBuilder(
                 animation: _autoPlay,
                 builder: (_, __) => LinearProgressIndicator(
                   value: _autoPlay.value,
-                  backgroundColor: Colors.white.withOpacity(0.05),
+                  backgroundColor: AppColors.divider.withOpacity(0.55),
                   valueColor: AlwaysStoppedAnimation(
-                    (widget.slides[_page]['accent'] as Color).withOpacity(0.65),
+                    (widget.slides[_page]['accent'] as Color).withOpacity(0.70),
                   ),
                   minHeight: 2,
                 ),
@@ -143,10 +124,17 @@ class _HeroBannerState extends State<HeroBanner> with TickerProviderStateMixin {
                     width: active ? r.w(28) : r.w(5),
                     height: r.h(5),
                     decoration: BoxDecoration(
-                      color: active ? accent : Colors.white.withOpacity(0.28),
+                      color: active
+                          ? accent
+                          : AppColors.textMuted.withOpacity(0.30),
                       borderRadius: BorderRadius.circular(3),
                       boxShadow: active
-                          ? [BoxShadow(color: accent.withOpacity(0.7), blurRadius: 12)]
+                          ? [
+                              BoxShadow(
+                                color: accent.withOpacity(0.18),
+                                blurRadius: 10,
+                              ),
+                            ]
                           : null,
                     ),
                   );
@@ -156,14 +144,19 @@ class _HeroBannerState extends State<HeroBanner> with TickerProviderStateMixin {
 
             // Fade into page background
             Positioned(
-              bottom: 0, left: 0, right: 0,
+              bottom: 0,
+              left: 0,
+              right: 0,
               child: Container(
-                height: r.h(120),
-                decoration: const BoxDecoration(
+                height: r.h(88),
+                decoration: BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [Colors.transparent, AppColors.bg],
+                    colors: [
+                      Colors.transparent,
+                      AppColors.bg.withOpacity(0.92),
+                    ],
                   ),
                 ),
               ),
@@ -205,7 +198,9 @@ class _HeroSlideState extends State<_HeroSlide>
   void initState() {
     super.initState();
     _enter = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 1000));
+      vsync: this,
+      duration: const Duration(milliseconds: 1000),
+    );
     if (widget.isActive) _enter.forward();
   }
 
@@ -234,17 +229,19 @@ class _HeroSlideState extends State<_HeroSlide>
     return Stack(
       fit: StackFit.expand,
       children: [
-        // 1 — Deep cinematic base
-        const ColoredBox(color: Color(0xFF0C0A08)),
+        // 1 — Light premium base
+        DecoratedBox(
+          decoration: BoxDecoration(gradient: AppColors.heroGradient),
+        ),
 
-        // 2 — Background fashion photo, barely visible (texture only)
+        // 2 — Background photo, softly washed into the layout
         Transform.translate(
           offset: Offset(0, scroll * 0.18),
           child: Image.network(
             imageUrl,
             fit: BoxFit.cover,
-            color: Colors.black.withOpacity(0.80),
-            colorBlendMode: BlendMode.darken,
+            color: Colors.white.withOpacity(0.58),
+            colorBlendMode: BlendMode.screen,
             loadingBuilder: (_, child, prog) =>
                 prog == null ? child : const SizedBox(),
             errorBuilder: (_, __, ___) => const SizedBox(),
@@ -258,137 +255,71 @@ class _HeroSlideState extends State<_HeroSlide>
               gradient: RadialGradient(
                 center: const Alignment(-1.0, 0.9),
                 radius: 1.1,
+                colors: [accent.withOpacity(0.10), Colors.transparent],
+              ),
+            ),
+          ),
+        ),
+
+        Positioned.fill(
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
                 colors: [
-                  accent.withOpacity(0.20),
-                  Colors.transparent,
+                  Colors.white.withOpacity(0.10),
+                  const Color(0xFFF8F6F2).withOpacity(0.88),
                 ],
               ),
             ),
           ),
         ),
 
-        // 4 — Film grain
-        Positioned.fill(
-          child: CustomPaint(painter: _GrainPainter(widget.slideIndex)),
-        ),
-
-        // 5 — Floating product (upper zone, vertically centered-top)
+        // 5 — Floating product showcase
         Positioned(
-          top: r.h(55),
-          left: 0,
-          right: 0,
-          height: r.h(310),
+          top: r.h(84),
+          right: r.w(10),
+          width: r.w(174),
+          height: r.h(204),
           child: AnimatedBuilder(
             animation: Listenable.merge([widget.float, _enter]),
             builder: (_, __) {
               final floatT = widget.float.value;
-              final dy = math.sin(floatT * math.pi * 2) * 14.0;
-              final dx = math.cos(floatT * math.pi * 2) * 4.5;
+              final dy = math.sin(floatT * math.pi * 2) * 10.0;
+              final dx = math.cos(floatT * math.pi * 2) * 3.0;
               final enterT = CurvedAnimation(
-                      parent: _enter, curve: Curves.easeOutExpo)
-                  .value
-                  .clamp(0.0, 1.0);
+                parent: _enter,
+                curve: Curves.easeOutExpo,
+              ).value.clamp(0.0, 1.0);
 
               return Transform.translate(
-                offset: Offset(dx, dy + (1.0 - enterT) * 55),
+                offset: Offset(dx, dy + (1.0 - enterT) * 70),
                 child: Opacity(
                   opacity: enterT,
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
-                      // Outer atmospheric halo (wide, soft)
                       Container(
-                        width: r.w(300),
-                        height: r.w(300),
+                        width: r.w(182),
+                        height: r.w(182),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           gradient: RadialGradient(
                             colors: [
-                              accent.withOpacity(0.38),
-                              accent.withOpacity(0.12),
+                              accent.withOpacity(0.10),
+                              accent.withOpacity(0.03),
                               Colors.transparent,
                             ],
                             stops: const [0.0, 0.5, 1.0],
                           ),
                         ),
                       ),
-                      // Inner bright core glow
-                      Container(
-                        width: r.w(160),
-                        height: r.w(160),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: RadialGradient(
-                            colors: [
-                              accent.withOpacity(0.30),
-                              Colors.transparent,
-                            ],
-                            stops: const [0.0, 1.0],
-                          ),
-                        ),
-                      ),
-                      // Product image — white-bg removed, edge-faded
-                      SizedBox(
-                        width: r.w(250),
-                        height: r.h(290),
-                        child: ShaderMask(
-                          // Soft radial edge fade → atmospheric floating feel
-                          blendMode: BlendMode.dstIn,
-                          shaderCallback: (rect) => const RadialGradient(
-                            center: Alignment.center,
-                            radius: 0.88,
-                            colors: [
-                              Colors.black,
-                              Colors.black,
-                              Colors.transparent,
-                            ],
-                            stops: [0.0, 0.68, 1.0],
-                          ).createShader(rect),
-                          child: ColorFiltered(
-                            // Luminosity → alpha:
-                            // white (luma=1) → alpha=0 (transparent)
-                            // black (luma=0) → alpha=1 (opaque)
-                            // colored → partial alpha (glowing effect)
-                            colorFilter: const ColorFilter.matrix([
-                              1, 0, 0, 0, 0,
-                              0, 1, 0, 0, 0,
-                              0, 0, 1, 0, 0,
-                              -0.2126, -0.7152, -0.0722, 0, 255,
-                            ]),
-                            child: Image.network(
-                              productUrl,
-                              fit: BoxFit.contain,
-                              loadingBuilder: (_, child, prog) => prog == null
-                                  ? child
-                                  : Center(
-                                      child: Text(emoji,
-                                          style: TextStyle(
-                                              fontSize: r.sp(80)))),
-                              errorBuilder: (_, __, ___) => Center(
-                                child: Text(emoji,
-                                    style: TextStyle(fontSize: r.sp(80))),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      // Drop shadow ellipse below product
-                      Positioned(
-                        bottom: r.h(8),
-                        child: Container(
-                          width: r.w(130),
-                          height: r.h(14),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100),
-                            boxShadow: [
-                              BoxShadow(
-                                color: accent.withOpacity(0.35),
-                                blurRadius: 28,
-                                spreadRadius: 8,
-                              ),
-                            ],
-                          ),
-                        ),
+                      _FloatingProductFrame(
+                        r: r,
+                        accent: accent,
+                        imageUrl: productUrl,
+                        emoji: emoji,
                       ),
                     ],
                   ),
@@ -402,14 +333,14 @@ class _HeroSlideState extends State<_HeroSlide>
         Positioned(
           bottom: r.h(65),
           left: r.w(24),
-          right: r.w(24),
+          right: r.w(132),
           child: AnimatedBuilder(
             animation: _enter,
             builder: (_, __) {
               final t = CurvedAnimation(
-                      parent: _enter, curve: Curves.easeOutCubic)
-                  .value
-                  .clamp(0.0, 1.0);
+                parent: _enter,
+                curve: Curves.easeOutCubic,
+              ).value.clamp(0.0, 1.0);
 
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -421,9 +352,10 @@ class _HeroSlideState extends State<_HeroSlide>
                     child: Transform.translate(
                       offset: Offset(-24 * (1 - t), 0),
                       child: _TagPill(
-                          label: d['tag'] as String,
-                          accent: accent,
-                          r: r),
+                        label: d['tag'] as String,
+                        accent: accent,
+                        r: r,
+                      ),
                     ),
                   ),
 
@@ -436,12 +368,13 @@ class _HeroSlideState extends State<_HeroSlide>
                       offset: Offset(0, 34 * (1 - t)),
                       child: Text(
                         d['title'] as String,
+                        maxLines: 2,
                         style: TextStyle(
-                          color: Colors.white,
-                          fontSize: r.sp(50),
+                          color: AppColors.textPrimary,
+                          fontSize: r.sp(42),
                           fontWeight: FontWeight.w900,
-                          letterSpacing: -2.5,
-                          height: 0.93,
+                          letterSpacing: -1.6,
+                          height: 1.0,
                         ),
                       ),
                     ),
@@ -457,9 +390,9 @@ class _HeroSlideState extends State<_HeroSlide>
                       child: Text(
                         d['subtitle'] as String,
                         style: TextStyle(
-                          color: Colors.white,
-                          fontSize: r.sp(13),
-                          fontWeight: FontWeight.w300,
+                          color: AppColors.textSecondary,
+                          fontSize: r.sp(12),
+                          fontWeight: FontWeight.w400,
                           letterSpacing: 0.3,
                           height: 1.45,
                         ),
@@ -476,13 +409,16 @@ class _HeroSlideState extends State<_HeroSlide>
                       offset: Offset(0, 16 * (1 - t)),
                       child: Row(
                         children: [
-                          _CtaButton(
-                            label: d['cta'] as String,
-                            accent: accent,
-                            r: r,
+                          Flexible(
+                            flex: 6,
+                            child: _CtaButton(
+                              label: d['cta'] as String,
+                              accent: accent,
+                              r: r,
+                            ),
                           ),
                           SizedBox(width: r.w(10)),
-                          _GhostButton(r: r),
+                          Flexible(flex: 4, child: _GhostButton(r: r)),
                         ],
                       ),
                     ),
@@ -493,6 +429,164 @@ class _HeroSlideState extends State<_HeroSlide>
           ),
         ),
       ],
+    );
+  }
+}
+
+class _FloatingProductFrame extends StatelessWidget {
+  final R r;
+  final Color accent;
+  final String imageUrl;
+  final String emoji;
+
+  const _FloatingProductFrame({
+    required this.r,
+    required this.accent,
+    required this.imageUrl,
+    required this.emoji,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: r.w(164),
+      height: r.h(184),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Positioned(
+            top: r.h(14),
+            left: r.w(12),
+            right: r.w(12),
+            bottom: r.h(8),
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(r.r(30)),
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Colors.white.withOpacity(0.35),
+                    Colors.white.withOpacity(0.12),
+                  ],
+                ),
+                border: Border.all(color: Colors.white.withOpacity(0.55)),
+              ),
+            ),
+          ),
+          Container(
+            width: r.w(146),
+            height: r.h(166),
+            padding: EdgeInsets.fromLTRB(r.w(12), r.h(12), r.w(12), r.h(10)),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(r.r(28)),
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  const Color(0xFFFFFCF8).withOpacity(0.98),
+                  const Color(0xFFF4EEE6).withOpacity(0.96),
+                ],
+              ),
+              border: Border.all(
+                color: Colors.white.withOpacity(0.75),
+                width: 1.1,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 14,
+                  offset: const Offset(0, 6),
+                  spreadRadius: -8,
+                ),
+                BoxShadow(
+                  color: accent.withOpacity(0.06),
+                  blurRadius: 12,
+                  offset: const Offset(0, 5),
+                  spreadRadius: -8,
+                ),
+              ],
+            ),
+            child: Stack(
+              children: [
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: r.w(10),
+                          vertical: r.h(5),
+                        ),
+                        decoration: BoxDecoration(
+                          color: accent.withOpacity(0.10),
+                          borderRadius: BorderRadius.circular(r.r(20)),
+                        ),
+                        child: Text(
+                          'CURATED',
+                          style: TextStyle(
+                            color: AppColors.textPrimary,
+                            fontSize: r.sp(9),
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 1.6,
+                          ),
+                        ),
+                      ),
+                      const Spacer(),
+                      Icon(
+                        Icons.diamond_outlined,
+                        color: accent.withOpacity(0.55),
+                        size: r.sp(16),
+                      ),
+                    ],
+                  ),
+                ),
+                Positioned.fill(
+                  top: r.h(22),
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(r.r(20)),
+                      gradient: RadialGradient(
+                        center: const Alignment(0, -0.2),
+                        radius: 0.95,
+                        colors: [
+                          accent.withOpacity(0.09),
+                          const Color(0xFFFBF7F1),
+                          const Color(0xFFF0E8DD),
+                        ],
+                        stops: const [0.0, 0.52, 1.0],
+                      ),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.all(r.w(10)),
+                      child: Image.network(
+                        imageUrl,
+                        fit: BoxFit.contain,
+                        loadingBuilder: (_, child, prog) => prog == null
+                            ? child
+                            : Center(
+                                child: Text(
+                                  emoji,
+                                  style: TextStyle(fontSize: r.sp(52)),
+                                ),
+                              ),
+                        errorBuilder: (_, __, ___) => Center(
+                          child: Text(
+                            emoji,
+                            style: TextStyle(fontSize: r.sp(52)),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -509,9 +603,9 @@ class _TagPill extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: r.w(11), vertical: r.h(5)),
       decoration: BoxDecoration(
-        color: accent.withOpacity(0.15),
+        color: accent.withOpacity(0.10),
         borderRadius: BorderRadius.circular(r.r(20)),
-        border: Border.all(color: accent.withOpacity(0.40), width: 1),
+        border: Border.all(color: accent.withOpacity(0.22), width: 1),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -523,7 +617,7 @@ class _TagPill extends StatelessWidget {
               shape: BoxShape.circle,
               color: accent,
               boxShadow: [
-                BoxShadow(color: accent.withOpacity(0.9), blurRadius: 6)
+                BoxShadow(color: accent.withOpacity(0.35), blurRadius: 6),
               ],
             ),
           ),
@@ -548,12 +642,16 @@ class _CtaButton extends StatelessWidget {
   final String label;
   final Color accent;
   final R r;
-  const _CtaButton(
-      {required this.label, required this.accent, required this.r});
+  const _CtaButton({
+    required this.label,
+    required this.accent,
+    required this.r,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      alignment: Alignment.center,
       padding: EdgeInsets.symmetric(horizontal: r.w(24), vertical: r.h(13)),
       decoration: BoxDecoration(
         color: accent,
@@ -569,6 +667,9 @@ class _CtaButton extends StatelessWidget {
       ),
       child: Text(
         label,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        softWrap: false,
         style: TextStyle(
           color: Colors.white,
           fontSize: r.sp(13),
@@ -587,27 +688,23 @@ class _GhostButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(r.r(40)),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
-        child: Container(
-          padding: EdgeInsets.symmetric(
-              horizontal: r.w(18), vertical: r.h(13)),
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.07),
-            borderRadius: BorderRadius.circular(r.r(40)),
-            border:
-                Border.all(color: Colors.white.withOpacity(0.18), width: 1),
-          ),
-          child: Text(
-            'Wishlist',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: r.sp(13),
-              fontWeight: FontWeight.w500,
-            ),
-          ),
+    return Container(
+      alignment: Alignment.center,
+      padding: EdgeInsets.symmetric(horizontal: r.w(18), vertical: r.h(13)),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.92),
+        borderRadius: BorderRadius.circular(r.r(40)),
+        border: Border.all(color: AppColors.divider.withOpacity(0.9), width: 1),
+      ),
+      child: Text(
+        'Wishlist',
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        softWrap: false,
+        style: TextStyle(
+          color: AppColors.textPrimary,
+          fontSize: r.sp(13),
+          fontWeight: FontWeight.w500,
         ),
       ),
     );

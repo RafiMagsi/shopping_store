@@ -21,7 +21,7 @@ class ScrollTilt3D extends StatefulWidget {
     required this.child,
     required this.scrollNotifier,
     this.intensity = 1.0,
-    this.rotateY   = false,
+    this.rotateY = false,
   });
 
   @override
@@ -33,14 +33,17 @@ class _ScrollTilt3DState extends State<ScrollTilt3D>
   late final AnimationController _lerp;
   double _targetTilt = 0.0;
   double _currentTilt = 0.0;
+  double _targetLift = 0.0;
+  double _currentLift = 0.0;
 
   @override
   void initState() {
     super.initState();
     // Smooth lerp controller (120fps-compatible)
-    _lerp = AnimationController(vsync: this, duration: const Duration(seconds: 1))
-      ..addListener(_smoothUpdate)
-      ..repeat();
+    _lerp =
+        AnimationController(vsync: this, duration: const Duration(seconds: 1))
+          ..addListener(_smoothUpdate)
+          ..repeat();
     widget.scrollNotifier.addListener(_measure);
     WidgetsBinding.instance.addPostFrameCallback((_) => _measure());
   }
@@ -59,27 +62,36 @@ class _ScrollTilt3DState extends State<ScrollTilt3D>
     final screenH = MediaQuery.sizeOf(context).height;
     final pos = box.localToGlobal(Offset.zero);
     final centerY = pos.dy + box.size.height / 2;
+    final distance = ((centerY - screenH / 2) / screenH).clamp(-0.7, 0.7);
     // Map: screen top → +max, screen center → 0, screen bottom → -max
-    _targetTilt = ((centerY - screenH / 2) / screenH * 0.28 * widget.intensity)
-        .clamp(-0.18, 0.18);
+    _targetTilt = (distance * 0.28 * widget.intensity).clamp(-0.18, 0.18);
+    _targetLift = (-distance * 22 * widget.intensity).clamp(-18.0, 18.0);
   }
 
   void _smoothUpdate() {
     if (!mounted) return;
     final next = _currentTilt + (_targetTilt - _currentTilt) * 0.12;
-    if ((next - _currentTilt).abs() > 0.0003) {
-      setState(() => _currentTilt = next);
+    final lift = _currentLift + (_targetLift - _currentLift) * 0.12;
+    if ((next - _currentTilt).abs() > 0.0003 ||
+        (lift - _currentLift).abs() > 0.05) {
+      setState(() {
+        _currentTilt = next;
+        _currentLift = lift;
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Transform(
-      transform: Matrix4.identity()
-        ..setEntry(3, 2, 0.0008) // perspective
-        ..rotateX(-_currentTilt),
-      alignment: Alignment.center,
-      child: widget.child,
+    return Transform.translate(
+      offset: Offset(0, _currentLift),
+      child: Transform(
+        transform: Matrix4.identity()
+          ..setEntry(3, 2, 0.0008)
+          ..rotateX(-_currentTilt),
+        alignment: Alignment.center,
+        child: widget.child,
+      ),
     );
   }
 }
@@ -109,9 +121,10 @@ class _HorizontalTilt3DState extends State<HorizontalTilt3D>
   @override
   void initState() {
     super.initState();
-    _loop = AnimationController(vsync: this, duration: const Duration(seconds: 1))
-      ..addListener(_smooth)
-      ..repeat();
+    _loop =
+        AnimationController(vsync: this, duration: const Duration(seconds: 1))
+          ..addListener(_smooth)
+          ..repeat();
     widget.scrollNotifier.addListener(_measure);
     WidgetsBinding.instance.addPostFrameCallback((_) => _measure());
   }

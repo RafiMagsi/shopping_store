@@ -8,6 +8,7 @@
 .idea/
 /build/
 /coverage/
+resources/
 
 # Generated docs and tooling output
 **/doc/api/

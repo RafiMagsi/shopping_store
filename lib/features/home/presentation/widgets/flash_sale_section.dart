@@ -5,17 +5,14 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_text_styles.dart';
 import '../../../../core/utils/responsive.dart';
 import '../../domain/entities/product.dart';
-import 'scroll_reveal.dart';
 
 class FlashSaleSection extends StatefulWidget {
   final List<Product> items;
-  final ValueNotifier<double> scrollNotifier;
   final VoidCallback onAddToCart;
 
   const FlashSaleSection({
     super.key,
     required this.items,
-    required this.scrollNotifier,
     required this.onAddToCart,
   });
 
@@ -58,95 +55,100 @@ class _FlashSaleSectionState extends State<FlashSaleSection>
     final m = (_remaining % 3600) ~/ 60;
     final s = _remaining % 60;
 
-    return ScrollReveal(
-      scrollNotifier: widget.scrollNotifier,
-      child: Container(
-        margin: EdgeInsets.symmetric(horizontal: r.w(20)),
-        decoration: BoxDecoration(
-          color: AppColors.surface,
-          borderRadius: BorderRadius.circular(r.r(20)),
-          border: Border.all(color: AppColors.divider, width: 1),
-          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 16, offset: Offset(0, 4))],
-        ),
-        child: Column(
-          children: [
-            // Header
-            Padding(
-              padding: EdgeInsets.fromLTRB(r.w(20), r.h(20), r.w(20), 0),
-              child: Row(
-                children: [
-                  // Pulsing bolt
-                  AnimatedBuilder(
-                    animation: _pulse,
-                    builder: (_, child) => Transform.scale(
-                      scale: 0.9 + 0.1 * _pulse.value,
-                      child: child,
-                    ),
-                    child: Container(
-                      padding: EdgeInsets.all(r.w(8)),
-                      decoration: BoxDecoration(
-                        color: AppColors.roseDeep,
-                        borderRadius: BorderRadius.circular(r.r(10)),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.roseDeep.withOpacity(0.5),
-                            blurRadius: 12,
-                            spreadRadius: 1,
-                          ),
-                        ],
-                      ),
-                      child: Icon(Icons.bolt_rounded,
-                          color: Colors.white, size: r.sp(18)),
-                    ),
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: r.w(20)),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(r.r(20)),
+        border: Border.all(color: AppColors.divider, width: 1),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 16,
+            offset: Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          // Header
+          Padding(
+            padding: EdgeInsets.fromLTRB(r.w(20), r.h(20), r.w(20), 0),
+            child: Row(
+              children: [
+                // Pulsing bolt
+                AnimatedBuilder(
+                  animation: _pulse,
+                  builder: (_, child) => Transform.scale(
+                    scale: 0.9 + 0.1 * _pulse.value,
+                    child: child,
                   ),
-
-                  SizedBox(width: r.w(12)),
-
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'FLASH SALE',
-                        style: AppTextStyles.overline.copyWith(
-                          color: AppColors.rose,
-                          fontSize: r.sp(11),
+                  child: Container(
+                    padding: EdgeInsets.all(r.w(8)),
+                    decoration: BoxDecoration(
+                      color: AppColors.roseDeep,
+                      borderRadius: BorderRadius.circular(r.r(10)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.roseDeep.withOpacity(0.5),
+                          blurRadius: 12,
+                          spreadRadius: 1,
                         ),
-                      ),
-                      Text(
-                        'Deals end in',
-                        style: AppTextStyles.bodyS.copyWith(fontSize: r.sp(11)),
-                      ),
-                    ],
+                      ],
+                    ),
+                    child: Icon(
+                      Icons.bolt_rounded,
+                      color: Colors.white,
+                      size: r.sp(18),
+                    ),
                   ),
+                ),
 
-                  const Spacer(),
+                SizedBox(width: r.w(12)),
 
-                  // Countdown
-                  Row(
-                    children: [
-                      _FlipDigit(value: h, r: r),
-                      _DigitSep(r: r),
-                      _FlipDigit(value: m, r: r),
-                      _DigitSep(r: r),
-                      _FlipDigit(value: s, r: r),
-                    ],
-                  ),
-                ],
-              ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'FLASH SALE',
+                      style: AppTextStyles.overline.copyWith(
+                        color: AppColors.rose,
+                        fontSize: r.sp(11),
+                      ),
+                    ),
+                    Text(
+                      'Deals end in',
+                      style: AppTextStyles.bodyS.copyWith(fontSize: r.sp(11)),
+                    ),
+                  ],
+                ),
+
+                const Spacer(),
+
+                // Countdown
+                Row(
+                  children: [
+                    _FlipDigit(value: h, r: r),
+                    _DigitSep(r: r),
+                    _FlipDigit(value: m, r: r),
+                    _DigitSep(r: r),
+                    _FlipDigit(value: s, r: r),
+                  ],
+                ),
+              ],
             ),
+          ),
 
-            SizedBox(height: r.h(16)),
+          SizedBox(height: r.h(16)),
 
-            // Items
-            ...widget.items.map((p) => _FlashItem(
-              product: p,
-              r: r,
-              onAddToCart: widget.onAddToCart,
-            )),
+          // Items
+          ...widget.items.map(
+            (p) =>
+                _FlashItem(product: p, r: r, onAddToCart: widget.onAddToCart),
+          ),
 
-            SizedBox(height: r.h(8)),
-          ],
-        ),
+          SizedBox(height: r.h(8)),
+        ],
       ),
     );
   }
@@ -233,10 +235,13 @@ class _FlashItemState extends State<_FlashItem>
   void initState() {
     super.initState();
     _barCtrl = AnimationController(
-      vsync: this, duration: const Duration(milliseconds: 1200),
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
     );
-    _bar = Tween<double>(begin: 0, end: widget.product.soldPercent / 100)
-        .animate(CurvedAnimation(parent: _barCtrl, curve: Curves.easeOutCubic));
+    _bar = Tween<double>(
+      begin: 0,
+      end: widget.product.soldPercent / 100,
+    ).animate(CurvedAnimation(parent: _barCtrl, curve: Curves.easeOutCubic));
 
     Future.delayed(const Duration(milliseconds: 400), () {
       if (mounted) _barCtrl.forward();
@@ -271,19 +276,36 @@ class _FlashItemState extends State<_FlashItem>
               width: r.w(64),
               height: r.h(64),
               child: p.hasImage
-                ? Image.network(p.imageUrl, fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(colors: [p.gradientStart, p.gradientEnd]),
+                  ? Image.network(
+                      p.imageUrl,
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, __, ___) => Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [p.gradientStart, p.gradientEnd],
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            p.emoji,
+                            style: TextStyle(fontSize: r.sp(28)),
+                          ),
+                        ),
                       ),
-                      child: Center(child: Text(p.emoji, style: TextStyle(fontSize: r.sp(28)))),
-                    ))
-                : Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(colors: [p.gradientStart, p.gradientEnd]),
+                    )
+                  : Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [p.gradientStart, p.gradientEnd],
+                        ),
+                      ),
+                      child: Center(
+                        child: Text(
+                          p.emoji,
+                          style: TextStyle(fontSize: r.sp(28)),
+                        ),
+                      ),
                     ),
-                    child: Center(child: Text(p.emoji, style: TextStyle(fontSize: r.sp(28)))),
-                  ),
             ),
           ),
 
@@ -293,21 +315,32 @@ class _FlashItemState extends State<_FlashItem>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(p.name,
-                    style: AppTextStyles.h3.copyWith(fontSize: r.sp(13)),
-                    maxLines: 1, overflow: TextOverflow.ellipsis),
+                Text(
+                  p.name,
+                  style: AppTextStyles.h3.copyWith(fontSize: r.sp(13)),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
                 SizedBox(height: r.h(2)),
                 Row(
                   children: [
-                    Text('\$${p.price.toInt()}',
-                        style: AppTextStyles.price.copyWith(fontSize: r.sp(15))),
+                    Text(
+                      '\$${p.price.toInt()}',
+                      style: AppTextStyles.price.copyWith(fontSize: r.sp(15)),
+                    ),
                     SizedBox(width: r.w(6)),
-                    Text('\$${p.originalPrice.toInt()}',
-                        style: AppTextStyles.priceStrike.copyWith(fontSize: r.sp(11))),
+                    Text(
+                      '\$${p.originalPrice.toInt()}',
+                      style: AppTextStyles.priceStrike.copyWith(
+                        fontSize: r.sp(11),
+                      ),
+                    ),
                     SizedBox(width: r.w(6)),
                     Container(
                       padding: EdgeInsets.symmetric(
-                          horizontal: r.w(5), vertical: r.h(2)),
+                        horizontal: r.w(5),
+                        vertical: r.h(2),
+                      ),
                       decoration: BoxDecoration(
                         color: AppColors.roseDeep,
                         borderRadius: BorderRadius.circular(r.r(4)),
@@ -315,7 +348,8 @@ class _FlashItemState extends State<_FlashItem>
                       child: Text(
                         '-${p.discountPercent.toInt()}%',
                         style: TextStyle(
-                          color: Colors.white, fontSize: r.sp(9),
+                          color: Colors.white,
+                          fontSize: r.sp(9),
                           fontWeight: FontWeight.w800,
                         ),
                       ),
@@ -336,8 +370,12 @@ class _FlashItemState extends State<_FlashItem>
                             animation: _bar,
                             builder: (_, __) => LinearProgressIndicator(
                               value: _bar.value,
-                              backgroundColor: AppColors.textMuted.withOpacity(0.3),
-                              valueColor: AlwaysStoppedAnimation(AppColors.rose),
+                              backgroundColor: AppColors.textMuted.withOpacity(
+                                0.3,
+                              ),
+                              valueColor: AlwaysStoppedAnimation(
+                                AppColors.rose,
+                              ),
                             ),
                           ),
                         ),
@@ -347,7 +385,8 @@ class _FlashItemState extends State<_FlashItem>
                     Text(
                       '${p.soldPercent}% sold',
                       style: AppTextStyles.bodyS.copyWith(
-                        color: AppColors.rose, fontSize: r.sp(10),
+                        color: AppColors.rose,
+                        fontSize: r.sp(10),
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -367,7 +406,8 @@ class _FlashItemState extends State<_FlashItem>
             },
             child: Container(
               padding: EdgeInsets.symmetric(
-                horizontal: r.w(14), vertical: r.h(10),
+                horizontal: r.w(14),
+                vertical: r.h(10),
               ),
               decoration: BoxDecoration(
                 gradient: AppColors.goldGradient,

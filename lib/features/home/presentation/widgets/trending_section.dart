@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/utils/responsive.dart';
 import '../../domain/entities/product.dart';
 import 'product_card.dart';
+import 'scroll_reveal.dart';
 
 class TrendingSection extends StatelessWidget {
   final List<Product> products;
@@ -24,6 +25,7 @@ class TrendingSection extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: r.w(16)),
       child: GridView.builder(
+        padding: EdgeInsets.only(top: r.h(8)),
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -33,9 +35,23 @@ class TrendingSection extends StatelessWidget {
           childAspectRatio: 0.60,
         ),
         itemCount: products.length,
-        itemBuilder: (_, i) => ProductCard(
-          product: products[i],
-          onAddToCart: onAddToCart,
+        itemBuilder: (_, i) => ScrollReveal(
+          scrollNotifier: scrollNotifier,
+          delay: Duration(milliseconds: 55 * i),
+          duration: const Duration(milliseconds: 680),
+          fromOffset: Offset(i.isEven ? -18 : 18, 20),
+          fromScale: 0.955,
+          fromBlur: 0,
+          use3d: false,
+          triggerFraction: 1.02,
+          parallaxExtent: 16,
+          parallaxScale: 0.02,
+          minVisibleOpacity: 0.62,
+          child: ProductCard(
+            product: products[i],
+            onAddToCart: onAddToCart,
+            scrollNotifier: scrollNotifier,
+          ),
         ),
       ),
     );

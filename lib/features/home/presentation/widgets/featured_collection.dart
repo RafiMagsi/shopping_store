@@ -36,6 +36,8 @@ class FeaturedCollection extends StatelessWidget {
               scrollNotifier: scrollNotifier,
               delay: const Duration(milliseconds: 80),
               fromOffset: const Offset(-30, 0),
+              parallaxExtent: 52,
+              parallaxScale: 0.06,
               child: _BigEditorialCard(r: r),
             ),
           ),
@@ -54,6 +56,7 @@ class FeaturedCollection extends StatelessWidget {
                     scrollNotifier: scrollNotifier,
                     delay: const Duration(milliseconds: 180),
                     fromOffset: const Offset(30, 0),
+                    parallaxExtent: 34,
                     child: _SmallCard(
                       r: r,
                       imageUrl: _FeaturedImg.bag,
@@ -71,6 +74,7 @@ class FeaturedCollection extends StatelessWidget {
                     scrollNotifier: scrollNotifier,
                     delay: const Duration(milliseconds: 260),
                     fromOffset: const Offset(30, 0),
+                    parallaxExtent: 34,
                     child: _SmallCard(
                       r: r,
                       imageUrl: _FeaturedImg.watch,
@@ -91,7 +95,7 @@ class FeaturedCollection extends StatelessWidget {
   }
 }
 
-// ── Big editorial dark card ────────────────────────────────────────────────
+// ── Big editorial feature card ─────────────────────────────────────────────
 class _BigEditorialCard extends StatefulWidget {
   final R r;
   const _BigEditorialCard({required this.r});
@@ -126,13 +130,17 @@ class _BigEditorialCardState extends State<_BigEditorialCard>
     return Container(
       height: r.h(260),
       decoration: BoxDecoration(
-        color: const Color(0xFF0F0D0B),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [const Color(0xFFFFFCF8), const Color(0xFFF0E9DF)],
+        ),
         borderRadius: BorderRadius.circular(r.r(20)),
-        border: Border.all(color: const Color(0xFF2A2620), width: 1),
+        border: Border.all(color: AppColors.divider, width: 1),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.25),
-            blurRadius: 20,
+            color: Colors.black.withOpacity(0.08),
+            blurRadius: 18,
             offset: const Offset(0, 8),
           ),
         ],
@@ -151,7 +159,7 @@ class _BigEditorialCardState extends State<_BigEditorialCard>
                 shape: BoxShape.circle,
                 gradient: RadialGradient(
                   colors: [
-                    AppColors.champagne.withOpacity(0.22),
+                    AppColors.champagne.withOpacity(0.12),
                     Colors.transparent,
                   ],
                 ),
@@ -161,42 +169,22 @@ class _BigEditorialCardState extends State<_BigEditorialCard>
 
           // Floating product image (right side)
           Positioned(
-            right: -r.w(10),
-            top: r.h(20),
-            width: r.w(140),
-            height: r.h(160),
+            right: r.w(10),
+            top: r.h(18),
+            width: r.w(120),
+            height: r.h(156),
             child: AnimatedBuilder(
               animation: _float,
               builder: (_, child) {
                 final dy = math.sin(_float.value * math.pi * 2) * 8.0;
-                return Transform.translate(
-                  offset: Offset(0, dy),
-                  child: child,
-                );
+                return Transform.translate(offset: Offset(0, dy), child: child);
               },
-              child: ShaderMask(
-                blendMode: BlendMode.dstIn,
-                shaderCallback: (rect) => const RadialGradient(
-                  center: Alignment.center,
-                  radius: 0.90,
-                  colors: [Colors.black, Colors.black, Colors.transparent],
-                  stops: [0.0, 0.65, 1.0],
-                ).createShader(rect),
-                child: ColorFiltered(
-                  colorFilter: const ColorFilter.matrix([
-                    1, 0, 0, 0, 0,
-                    0, 1, 0, 0, 0,
-                    0, 0, 1, 0, 0,
-                    -0.2126, -0.7152, -0.0722, 0, 255,
-                  ]),
-                  child: Image.network(
-                    _FeaturedImg.sneaker,
-                    fit: BoxFit.contain,
-                    errorBuilder: (_, __, ___) => Center(
-                      child: Text('👟', style: TextStyle(fontSize: r.sp(52))),
-                    ),
-                  ),
-                ),
+              child: _FramedProductVisual(
+                r: r,
+                accent: AppColors.champagne,
+                imageUrl: _FeaturedImg.sneaker,
+                emoji: '👟',
+                compact: false,
               ),
             ),
           ),
@@ -210,18 +198,21 @@ class _BigEditorialCardState extends State<_BigEditorialCard>
                 // NEW IN badge
                 Container(
                   padding: EdgeInsets.symmetric(
-                    horizontal: r.w(8), vertical: r.h(4),
+                    horizontal: r.w(8),
+                    vertical: r.h(4),
                   ),
                   decoration: BoxDecoration(
                     color: AppColors.champagne.withOpacity(0.18),
                     borderRadius: BorderRadius.circular(r.r(6)),
                     border: Border.all(
-                        color: AppColors.champagne.withOpacity(0.3), width: 1),
+                      color: AppColors.champagne.withOpacity(0.22),
+                      width: 1,
+                    ),
                   ),
                   child: Text(
                     'NEW IN',
                     style: TextStyle(
-                      color: AppColors.champagneLight,
+                      color: AppColors.champagneDeep,
                       fontSize: r.sp(9),
                       fontWeight: FontWeight.w800,
                       letterSpacing: 1.5,
@@ -235,7 +226,7 @@ class _BigEditorialCardState extends State<_BigEditorialCard>
                 Text(
                   'Nike Air\nMax 2025',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: AppColors.textPrimary,
                     fontSize: r.sp(18),
                     fontWeight: FontWeight.w900,
                     letterSpacing: -0.8,
@@ -246,13 +237,12 @@ class _BigEditorialCardState extends State<_BigEditorialCard>
 
                 // Price
                 ShaderMask(
-                  shaderCallback: (b) =>
-                      AppColors.goldGradient.createShader(b),
+                  shaderCallback: (b) => AppColors.goldGradient.createShader(b),
                   blendMode: BlendMode.srcIn,
                   child: Text(
                     'From \$199',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: AppColors.textPrimary,
                       fontSize: r.sp(12),
                       fontWeight: FontWeight.w700,
                     ),
@@ -263,14 +253,15 @@ class _BigEditorialCardState extends State<_BigEditorialCard>
                 // Shop Now button
                 Container(
                   padding: EdgeInsets.symmetric(
-                    horizontal: r.w(14), vertical: r.h(8),
+                    horizontal: r.w(14),
+                    vertical: r.h(8),
                   ),
                   decoration: BoxDecoration(
-                    color: AppColors.champagne,
+                    color: AppColors.champagneDeep,
                     borderRadius: BorderRadius.circular(r.r(10)),
                     boxShadow: [
                       BoxShadow(
-                        color: AppColors.champagne.withOpacity(0.35),
+                        color: AppColors.champagne.withOpacity(0.18),
                         blurRadius: 12,
                         offset: const Offset(0, 4),
                       ),
@@ -279,7 +270,8 @@ class _BigEditorialCardState extends State<_BigEditorialCard>
                   child: Text(
                     'Shop Now →',
                     style: AppTextStyles.labelL.copyWith(
-                      color: Colors.white, fontSize: r.sp(11),
+                      color: Colors.white,
+                      fontSize: r.sp(11),
                     ),
                   ),
                 ),
@@ -334,34 +326,18 @@ class _SmallCard extends StatelessWidget {
       child: Stack(
         clipBehavior: Clip.hardEdge,
         children: [
-          // Product image (upper right) — white bg removed
+          // Product image framed as a premium object
           Positioned(
-            right: -r.w(8),
-            top: r.h(4),
-            width: r.w(76),
-            height: r.h(66),
-            child: ShaderMask(
-              blendMode: BlendMode.dstIn,
-              shaderCallback: (rect) => const RadialGradient(
-                center: Alignment.center,
-                radius: 0.88,
-                colors: [Colors.black, Colors.black, Colors.transparent],
-                stops: [0.0, 0.60, 1.0],
-              ).createShader(rect),
-              child: ColorFiltered(
-                colorFilter: const ColorFilter.matrix([
-                  1, 0, 0, 0, 0,
-                  0, 1, 0, 0, 0,
-                  0, 0, 1, 0, 0,
-                  -0.2126, -0.7152, -0.0722, 0, 255,
-                ]),
-                child: Image.network(
-                  imageUrl,
-                  fit: BoxFit.contain,
-                  errorBuilder: (_, __, ___) =>
-                      Text(emoji, style: TextStyle(fontSize: r.sp(28))),
-                ),
-              ),
+            right: r.w(8),
+            top: r.h(10),
+            width: r.w(72),
+            height: r.h(74),
+            child: _FramedProductVisual(
+              r: r,
+              accent: accent,
+              imageUrl: imageUrl,
+              emoji: emoji,
+              compact: true,
             ),
           ),
 
@@ -394,8 +370,11 @@ class _SmallCard extends StatelessWidget {
                       ),
                     ),
                     SizedBox(width: r.w(2)),
-                    Icon(Icons.arrow_forward_rounded,
-                        color: accent, size: r.sp(10)),
+                    Icon(
+                      Icons.arrow_forward_rounded,
+                      color: accent,
+                      size: r.sp(10),
+                    ),
                   ],
                 ),
               ],
@@ -412,11 +391,94 @@ class _SmallCard extends StatelessWidget {
                 shape: BoxShape.circle,
                 color: accent.withOpacity(0.10),
               ),
-              child: Icon(Icons.arrow_outward_rounded,
-                  color: accent, size: r.sp(10)),
+              child: Icon(
+                Icons.arrow_outward_rounded,
+                color: accent,
+                size: r.sp(10),
+              ),
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _FramedProductVisual extends StatelessWidget {
+  final R r;
+  final Color accent;
+  final String imageUrl;
+  final String emoji;
+  final bool compact;
+
+  const _FramedProductVisual({
+    required this.r,
+    required this.accent,
+    required this.imageUrl,
+    required this.emoji,
+    required this.compact,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final radius = compact ? r.r(18) : r.r(26);
+    final padding = compact ? r.w(7) : r.w(12);
+
+    return Container(
+      padding: EdgeInsets.all(padding),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(radius),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Colors.white.withOpacity(compact ? 0.90 : 0.95),
+            const Color(0xFFF0E7D9).withOpacity(compact ? 0.92 : 0.96),
+          ],
+        ),
+        border: Border.all(color: Colors.white.withOpacity(0.75), width: 1),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(compact ? 0.10 : 0.16),
+            blurRadius: compact ? 14 : 22,
+            offset: const Offset(0, 8),
+            spreadRadius: compact ? -8 : -10,
+          ),
+          BoxShadow(
+            color: accent.withOpacity(compact ? 0.16 : 0.22),
+            blurRadius: compact ? 18 : 24,
+            offset: const Offset(0, 6),
+            spreadRadius: compact ? -10 : -12,
+          ),
+        ],
+      ),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(compact ? r.r(14) : r.r(20)),
+          gradient: RadialGradient(
+            center: const Alignment(0, -0.1),
+            radius: 0.95,
+            colors: [
+              accent.withOpacity(compact ? 0.12 : 0.16),
+              const Color(0xFFF6F1E8),
+              const Color(0xFFE9DFD0),
+            ],
+            stops: const [0.0, 0.52, 1.0],
+          ),
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(compact ? r.w(6) : r.w(10)),
+          child: Image.network(
+            imageUrl,
+            fit: BoxFit.contain,
+            errorBuilder: (_, __, ___) => Center(
+              child: Text(
+                emoji,
+                style: TextStyle(fontSize: r.sp(compact ? 24 : 44)),
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

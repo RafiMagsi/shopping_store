@@ -2,7 +2,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_text_styles.dart';
 import '../../../../core/utils/responsive.dart';
 
 class AppHeader extends StatefulWidget {
@@ -66,13 +65,10 @@ class _AppHeaderState extends State<AppHeader>
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         decoration: BoxDecoration(
-          color: AppColors.surface.withOpacity(scrolled ? opacity * 0.96 : 0),
+          color: AppColors.surface.withOpacity(scrolled ? opacity * 0.94 : 0),
           border: scrolled
               ? Border(
-                  bottom: BorderSide(
-                    color: AppColors.divider,
-                    width: opacity,
-                  ),
+                  bottom: BorderSide(color: AppColors.divider, width: opacity),
                 )
               : null,
         ),
@@ -136,10 +132,7 @@ class _HeaderContent extends StatelessWidget {
     return SafeArea(
       bottom: false,
       child: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: r.w(20),
-          vertical: r.h(12),
-        ),
+        padding: EdgeInsets.symmetric(horizontal: r.w(20), vertical: r.h(12)),
         child: Row(
           children: [
             // Logo / Brand
@@ -149,20 +142,27 @@ class _HeaderContent extends StatelessWidget {
               child: Row(
                 children: [
                   Container(
-                    width: r.w(32),
-                    height: r.w(32),
+                    width: r.w(38),
+                    height: r.w(38),
                     decoration: BoxDecoration(
                       gradient: AppColors.goldGradient,
-                      borderRadius: BorderRadius.circular(r.r(8)),
+                      borderRadius: BorderRadius.circular(r.r(12)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.champagne.withOpacity(0.16),
+                          blurRadius: 14,
+                          offset: const Offset(0, 6),
+                        ),
+                      ],
                     ),
                     child: Center(
                       child: Text(
                         'L',
                         style: TextStyle(
                           color: AppColors.textInverse,
-                          fontSize: r.sp(16),
+                          fontSize: r.sp(15),
                           fontWeight: FontWeight.w900,
-                          letterSpacing: -0.5,
+                          letterSpacing: -0.2,
                         ),
                       ),
                     ),
@@ -174,7 +174,7 @@ class _HeaderContent extends StatelessWidget {
                       color: AppColors.textPrimary,
                       fontSize: r.sp(18),
                       fontWeight: FontWeight.w800,
-                      letterSpacing: 3,
+                      letterSpacing: 2.6,
                     ),
                   ),
                 ],
@@ -224,10 +224,16 @@ class _IconBtn extends StatelessWidget {
         width: r.w(40),
         height: r.w(40),
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: AppColors.surface.withOpacity(0.98),
           borderRadius: BorderRadius.circular(r.r(12)),
           border: Border.all(color: AppColors.divider, width: 1),
-          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 8)],
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 14,
+              offset: const Offset(0, 5),
+            ),
+          ],
         ),
         child: Icon(icon, color: AppColors.textPrimary, size: r.sp(20)),
       ),
@@ -262,13 +268,22 @@ class _CartBtn extends StatelessWidget {
             width: r.w(40),
             height: r.w(40),
             decoration: BoxDecoration(
-              color: AppColors.surface,
+              color: AppColors.surface.withOpacity(0.98),
               borderRadius: BorderRadius.circular(r.r(12)),
               border: Border.all(color: AppColors.divider, width: 1),
-              boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 8)],
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 14,
+                  offset: const Offset(0, 5),
+                ),
+              ],
             ),
-            child: Icon(Icons.shopping_bag_outlined,
-                color: AppColors.textPrimary, size: r.sp(20)),
+            child: Icon(
+              Icons.shopping_bag_outlined,
+              color: AppColors.textPrimary,
+              size: r.sp(20),
+            ),
           ),
           if (count > 0)
             Positioned(
@@ -322,7 +337,7 @@ class _ProfileAvatar extends StatelessWidget {
         decoration: BoxDecoration(
           gradient: AppColors.goldGradient,
           shape: BoxShape.circle,
-          border: Border.all(color: AppColors.amberDeep, width: 1.5),
+          border: Border.all(color: AppColors.champagneDeep, width: 1.5),
         ),
         child: Center(
           child: Text(

@@ -1,8 +1,6 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_text_styles.dart';
 import '../../../../core/utils/responsive.dart';
 import '../../domain/entities/product.dart';
 import 'scroll_tilt.dart';
@@ -18,15 +16,19 @@ class ProductCard extends StatefulWidget {
   const ProductCard({
     super.key,
     required this.product,
-    this.onTap, this.onFavorite, this.onAddToCart,
-    this.width, this.scrollNotifier,
+    this.onTap,
+    this.onFavorite,
+    this.onAddToCart,
+    this.width,
+    this.scrollNotifier,
   });
 
   @override
   State<ProductCard> createState() => _ProductCardState();
 }
 
-class _ProductCardState extends State<ProductCard> with TickerProviderStateMixin {
+class _ProductCardState extends State<ProductCard>
+    with TickerProviderStateMixin {
   late final AnimationController _press;
   late final AnimationController _heart;
   late final Animation<double> _scale;
@@ -36,10 +38,18 @@ class _ProductCardState extends State<ProductCard> with TickerProviderStateMixin
   @override
   void initState() {
     super.initState();
-    _press = AnimationController(vsync: this, duration: const Duration(milliseconds: 100));
-    _heart = AnimationController(vsync: this, duration: const Duration(milliseconds: 400));
-    _scale = Tween(begin: 1.0, end: 0.95)
-        .animate(CurvedAnimation(parent: _press, curve: Curves.easeOut));
+    _press = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 100),
+    );
+    _heart = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 400),
+    );
+    _scale = Tween(
+      begin: 1.0,
+      end: 0.95,
+    ).animate(CurvedAnimation(parent: _press, curve: Curves.easeOut));
     _heartAnim = TweenSequence([
       TweenSequenceItem(tween: Tween(begin: 1.0, end: 1.5), weight: 40),
       TweenSequenceItem(tween: Tween(begin: 1.5, end: 0.88), weight: 30),
@@ -48,7 +58,11 @@ class _ProductCardState extends State<ProductCard> with TickerProviderStateMixin
   }
 
   @override
-  void dispose() { _press.dispose(); _heart.dispose(); super.dispose(); }
+  void dispose() {
+    _press.dispose();
+    _heart.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,9 +74,19 @@ class _ProductCardState extends State<ProductCard> with TickerProviderStateMixin
     Widget card = ScaleTransition(
       scale: _scale,
       child: GestureDetector(
-        onTapDown: (_) { _press.forward(); setState(() => _hovered = true); },
-        onTapUp: (_) { _press.reverse(); setState(() => _hovered = false); widget.onTap?.call(); },
-        onTapCancel: () { _press.reverse(); setState(() => _hovered = false); },
+        onTapDown: (_) {
+          _press.forward();
+          setState(() => _hovered = true);
+        },
+        onTapUp: (_) {
+          _press.reverse();
+          setState(() => _hovered = false);
+          widget.onTap?.call();
+        },
+        onTapCancel: () {
+          _press.reverse();
+          setState(() => _hovered = false);
+        },
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           width: w,
@@ -90,12 +114,13 @@ class _ProductCardState extends State<ProductCard> with TickerProviderStateMixin
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,  // fill parent height
+            mainAxisSize: MainAxisSize.max, // fill parent height
             children: [
               // Image — Expanded to fill remaining space
               Expanded(
                 child: _ProductImg(
-                  product: p, r: r,
+                  product: p,
+                  r: r,
                   heartAnim: _heartAnim,
                   onFavorite: () {
                     HapticFeedback.lightImpact();
@@ -107,7 +132,9 @@ class _ProductCardState extends State<ProductCard> with TickerProviderStateMixin
 
               // Details — fixed-height
               _ProductDetails(
-                product: p, r: r, accent: accent,
+                product: p,
+                r: r,
+                accent: accent,
                 onAddToCart: () {
                   HapticFeedback.lightImpact();
                   widget.onAddToCart?.call();
@@ -120,7 +147,11 @@ class _ProductCardState extends State<ProductCard> with TickerProviderStateMixin
     );
 
     if (widget.scrollNotifier != null) {
-      card = ScrollTilt3D(scrollNotifier: widget.scrollNotifier!, intensity: 0.5, child: card);
+      card = ScrollTilt3D(
+        scrollNotifier: widget.scrollNotifier!,
+        intensity: 0.72,
+        child: card,
+      );
     }
     return card;
   }
@@ -135,8 +166,10 @@ class _ProductImg extends StatelessWidget {
   final VoidCallback onFavorite;
 
   const _ProductImg({
-    required this.product, required this.r,
-    required this.heartAnim, required this.onFavorite,
+    required this.product,
+    required this.r,
+    required this.heartAnim,
+    required this.onFavorite,
   });
 
   @override
@@ -148,7 +181,7 @@ class _ProductImg extends StatelessWidget {
         topRight: Radius.circular(r.r(20)),
       ),
       child: Stack(
-        fit: StackFit.expand,   // fills whatever Expanded gives it
+        fit: StackFit.expand, // fills whatever Expanded gives it
         children: [
           // Warm ivory photo background
           Container(color: AppColors.cardElevated),
@@ -170,17 +203,16 @@ class _ProductImg extends StatelessWidget {
 
           // Very subtle accent tint at top
           Positioned(
-            top: 0, left: 0, right: 0,
+            top: 0,
+            left: 0,
+            right: 0,
             height: 48,
             child: DecoratedBox(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [
-                    accent.withOpacity(0.06),
-                    Colors.transparent,
-                  ],
+                  colors: [accent.withOpacity(0.06), Colors.transparent],
                 ),
               ),
             ),
@@ -189,16 +221,21 @@ class _ProductImg extends StatelessWidget {
           // Badge
           if (product.badge.isNotEmpty)
             Positioned(
-              top: r.h(10), left: r.w(10),
+              top: r.h(10),
+              left: r.w(10),
               child: _Badge(label: product.badge, accent: accent, r: r),
             ),
 
           // Discount chip
           if (product.hasDiscount)
             Positioned(
-              bottom: r.h(10), left: r.w(10),
+              bottom: r.h(10),
+              left: r.w(10),
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: r.w(6), vertical: r.h(3)),
+                padding: EdgeInsets.symmetric(
+                  horizontal: r.w(6),
+                  vertical: r.h(3),
+                ),
                 decoration: BoxDecoration(
                   color: AppColors.rose,
                   borderRadius: BorderRadius.circular(r.r(6)),
@@ -206,7 +243,9 @@ class _ProductImg extends StatelessWidget {
                 child: Text(
                   '-${product.discountPercent.toInt()}%',
                   style: const TextStyle(
-                    color: Colors.white, fontSize: 9, fontWeight: FontWeight.w800,
+                    color: Colors.white,
+                    fontSize: 9,
+                    fontWeight: FontWeight.w800,
                   ),
                 ),
               ),
@@ -214,11 +253,13 @@ class _ProductImg extends StatelessWidget {
 
           // Favorite button
           Positioned(
-            top: r.h(8), right: r.w(8),
+            top: r.h(8),
+            right: r.w(8),
             child: GestureDetector(
               onTap: onFavorite,
               child: Container(
-                width: r.w(32), height: r.w(32),
+                width: r.w(32),
+                height: r.w(32),
                 decoration: BoxDecoration(
                   color: AppColors.surface,
                   shape: BoxShape.circle,
@@ -236,7 +277,9 @@ class _ProductImg extends StatelessWidget {
                     product.isFavorite
                         ? Icons.favorite_rounded
                         : Icons.favorite_border_rounded,
-                    color: product.isFavorite ? AppColors.rose : AppColors.textMuted,
+                    color: product.isFavorite
+                        ? AppColors.rose
+                        : AppColors.textMuted,
                     size: r.sp(15),
                   ),
                 ),
@@ -258,8 +301,10 @@ class _ProductDetails extends StatelessWidget {
   final VoidCallback onAddToCart;
 
   const _ProductDetails({
-    required this.product, required this.r,
-    required this.accent, required this.onAddToCart,
+    required this.product,
+    required this.r,
+    required this.accent,
+    required this.onAddToCart,
   });
 
   @override
@@ -304,7 +349,11 @@ class _ProductDetails extends StatelessWidget {
           // Rating
           Row(
             children: [
-              Icon(Icons.star_rounded, color: AppColors.champagne, size: r.sp(12)),
+              Icon(
+                Icons.star_rounded,
+                color: AppColors.champagne,
+                size: r.sp(12),
+              ),
               SizedBox(width: r.w(2)),
               Text(
                 p.rating.toStringAsFixed(1),
@@ -317,7 +366,10 @@ class _ProductDetails extends StatelessWidget {
               SizedBox(width: r.w(3)),
               Text(
                 '(${_fmt(p.reviews)})',
-                style: TextStyle(color: AppColors.textMuted, fontSize: r.sp(10)),
+                style: TextStyle(
+                  color: AppColors.textMuted,
+                  fontSize: r.sp(10),
+                ),
               ),
             ],
           ),
@@ -399,7 +451,10 @@ class _Badge extends StatelessWidget {
       child: Text(
         label,
         style: const TextStyle(
-          color: Colors.white, fontSize: 9, fontWeight: FontWeight.w800, letterSpacing: 0.5,
+          color: Colors.white,
+          fontSize: 9,
+          fontWeight: FontWeight.w800,
+          letterSpacing: 0.5,
         ),
       ),
     );
@@ -424,30 +479,41 @@ class _AddBtnState extends State<_AddBtn> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    _c = AnimationController(vsync: this, duration: const Duration(milliseconds: 120));
+    _c = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 120),
+    );
   }
 
   @override
-  void dispose() { _c.dispose(); super.dispose(); }
+  void dispose() {
+    _c.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final r = widget.r;
     return GestureDetector(
       onTapDown: (_) => _c.forward(),
-      onTapUp: (_) { _c.reverse(); widget.onTap(); },
+      onTapUp: (_) {
+        _c.reverse();
+        widget.onTap();
+      },
       onTapCancel: () => _c.reverse(),
       child: ScaleTransition(
         scale: Tween(begin: 1.0, end: 0.82).animate(_c),
         child: Container(
-          width: r.w(32), height: r.w(32),
+          width: r.w(32),
+          height: r.w(32),
           decoration: BoxDecoration(
             color: widget.accent,
             borderRadius: BorderRadius.circular(r.r(9)),
             boxShadow: [
               BoxShadow(
                 color: widget.accent.withOpacity(0.25),
-                blurRadius: 8, offset: const Offset(0, 3),
+                blurRadius: 8,
+                offset: const Offset(0, 3),
               ),
             ],
           ),

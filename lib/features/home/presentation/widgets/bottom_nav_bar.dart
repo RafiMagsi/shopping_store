@@ -14,11 +14,31 @@ class ShopBottomNavBar extends StatelessWidget {
   });
 
   static const _items = [
-    _NavItem(active: Icons.home_rounded,       inactive: Icons.home_outlined,         label: 'Home'),
-    _NavItem(active: Icons.explore_rounded,    inactive: Icons.explore_outlined,      label: 'Explore'),
-    _NavItem(active: Icons.shopping_bag,       inactive: Icons.shopping_bag_outlined, label: 'Cart'),
-    _NavItem(active: Icons.favorite_rounded,   inactive: Icons.favorite_border,       label: 'Wishlist'),
-    _NavItem(active: Icons.person_rounded,     inactive: Icons.person_outline_rounded,label: 'Profile'),
+    _NavItem(
+      active: Icons.home_rounded,
+      inactive: Icons.home_outlined,
+      label: 'Home',
+    ),
+    _NavItem(
+      active: Icons.explore_rounded,
+      inactive: Icons.explore_outlined,
+      label: 'Explore',
+    ),
+    _NavItem(
+      active: Icons.shopping_bag,
+      inactive: Icons.shopping_bag_outlined,
+      label: 'Cart',
+    ),
+    _NavItem(
+      active: Icons.favorite_rounded,
+      inactive: Icons.favorite_border,
+      label: 'Wishlist',
+    ),
+    _NavItem(
+      active: Icons.person_rounded,
+      inactive: Icons.person_outline_rounded,
+      label: 'Profile',
+    ),
   ];
 
   @override
@@ -29,14 +49,12 @@ class ShopBottomNavBar extends StatelessWidget {
       height: r.h(72) + MediaQuery.of(context).padding.bottom,
       padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        border: Border(
-          top: BorderSide(color: AppColors.divider, width: 1),
-        ),
+        color: AppColors.surface.withOpacity(0.98),
+        border: Border(top: BorderSide(color: AppColors.divider, width: 1)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 20,
+            color: Colors.black.withOpacity(0.06),
+            blurRadius: 18,
             offset: const Offset(0, -4),
           ),
         ],
@@ -106,7 +124,9 @@ class _NavTile extends StatelessWidget {
               width: isSelected ? r.w(44) : r.w(36),
               height: isSelected ? r.h(32) : r.h(28),
               decoration: BoxDecoration(
-                color: isSelected ? AppColors.champagneMuted : Colors.transparent,
+                color: isSelected
+                    ? AppColors.champagneMuted
+                    : Colors.transparent,
                 borderRadius: BorderRadius.circular(r.r(10)),
               ),
               child: Center(
@@ -115,7 +135,9 @@ class _NavTile extends StatelessWidget {
                   child: Icon(
                     isSelected ? item.active : item.inactive,
                     key: ValueKey(isSelected),
-                    color: isSelected ? AppColors.champagne : AppColors.textMuted,
+                    color: isSelected
+                        ? AppColors.champagne
+                        : AppColors.textMuted,
                     size: r.sp(22),
                   ),
                 ),
