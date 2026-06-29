@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 
-/// Refined scroll reveal for light UIs: soft slide, fade, and minimal scale.
+/// Refined scroll reveal for light UIs: soft slide, layered parallax, and fade.
 class ScrollReveal extends StatefulWidget {
   final Widget child;
   final ValueNotifier<double> scrollNotifier;
@@ -18,6 +18,7 @@ class ScrollReveal extends StatefulWidget {
   final double parallaxExtent;
   final double parallaxScale;
   final double minVisibleOpacity;
+  final double exitDriftFactor;
   final double
   triggerFraction; // 0..1 — how far into viewport before triggering
 
@@ -26,19 +27,20 @@ class ScrollReveal extends StatefulWidget {
     required this.child,
     required this.scrollNotifier,
     this.delay = Duration.zero,
-    this.duration = const Duration(milliseconds: 680),
-    this.fromOffset = const Offset(0, 28),
-    this.fromScale = 0.965,
-    this.fromBlur = 2.0,
+    this.duration = const Duration(milliseconds: 760),
+    this.fromOffset = const Offset(0, 24),
+    this.fromScale = 0.972,
+    this.fromBlur = 0.0,
     this.fromAngle = 0.0,
     this.useBlur = false,
     this.use3d = false,
     this.useViewportOffset = false,
     this.useParallax = true,
-    this.parallaxExtent = 26,
-    this.parallaxScale = 0.035,
-    this.minVisibleOpacity = 0.22,
-    this.triggerFraction = 1.05,
+    this.parallaxExtent = 20,
+    this.parallaxScale = 0.02,
+    this.minVisibleOpacity = 0.46,
+    this.exitDriftFactor = 0.58,
+    this.triggerFraction = 1.0,
   });
 
   @override
@@ -57,7 +59,7 @@ class _ScrollRevealState extends State<ScrollReveal>
   void initState() {
     super.initState();
     _ctrl = AnimationController(vsync: this, duration: widget.duration);
-    _t = CurvedAnimation(parent: _ctrl, curve: Curves.easeOutCubic);
+    _t = CurvedAnimation(parent: _ctrl, curve: Curves.easeOutQuart);
     widget.scrollNotifier.addListener(_handleScroll);
     WidgetsBinding.instance.addPostFrameCallback((_) => _check());
   }
@@ -90,11 +92,11 @@ class _ScrollRevealState extends State<ScrollReveal>
     final centerY = pos.dy + box.size.height / 2;
     _centerRatio = centerY / screenH;
 
-    final topFade = ((centerY - screenH * 0.06) / (screenH * 0.24)).clamp(
+    final topFade = ((centerY - screenH * 0.02) / (screenH * 0.20)).clamp(
       0.0,
       1.0,
     );
-    final bottomFade = ((screenH * 0.98 - centerY) / (screenH * 0.34)).clamp(
+    final bottomFade = ((screenH * 0.99 - centerY) / (screenH * 0.28)).clamp(
       0.0,
       1.0,
     );
@@ -110,8 +112,8 @@ class _ScrollRevealState extends State<ScrollReveal>
       _check();
       return;
     }
-    if ((oldCenter - _centerRatio).abs() > 0.01 ||
-        (oldVisibility - _visibility).abs() > 0.02) {
+    if ((oldCenter - _centerRatio).abs() > 0.008 ||
+        (oldVisibility - _visibility).abs() > 0.015) {
       setState(() {});
     }
   }
@@ -130,9 +132,18 @@ class _ScrollRevealState extends State<ScrollReveal>
         final dy = widget.useViewportOffset
             ? widget.fromOffset.dy * size.height
             : widget.fromOffset.dy;
-        final depth = (0.5 - _centerRatio).clamp(-1.0, 1.0);
+        final depth = (0.52 - _centerRatio).clamp(-1.0, 1.0);
+        final edgeFade = (1 - _visibility).clamp(0.0, 1.0);
+        final exitDirection = _centerRatio < 0.5 ? -1.0 : 1.0;
         final parallaxY = widget.useParallax
-            ? depth * widget.parallaxExtent
+            ? depth * widget.parallaxExtent * 0.82 +
+                  exitDirection *
+                      edgeFade *
+                      widget.parallaxExtent *
+                      widget.exitDriftFactor
+            : 0.0;
+        final parallaxX = widget.useParallax
+            ? (dx == 0 ? 0.0 : dx.sign * edgeFade * 14)
             : 0.0;
         final settleOpacity = widget.useParallax
             ? (widget.minVisibleOpacity +
@@ -140,14 +151,14 @@ class _ScrollRevealState extends State<ScrollReveal>
                   .clamp(widget.minVisibleOpacity, 1.0)
             : 1.0;
         final settleScale = widget.useParallax
-            ? (1 - (1 - _visibility) * widget.parallaxScale).clamp(0.94, 1.0)
+            ? (1 - (1 - _visibility) * widget.parallaxScale).clamp(0.965, 1.0)
             : 1.0;
 
         Widget result = child!;
 
         // 1. Translate
         result = Transform.translate(
-          offset: Offset(dx * (1 - v), dy * (1 - v) + parallaxY),
+          offset: Offset(dx * (1 - v) + parallaxX, dy * (1 - v) + parallaxY),
           child: result,
         );
 

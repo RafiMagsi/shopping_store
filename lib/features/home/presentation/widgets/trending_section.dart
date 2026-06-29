@@ -25,7 +25,7 @@ class TrendingSection extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: r.w(16)),
       child: GridView.builder(
-        padding: EdgeInsets.only(top: r.h(8)),
+        padding: EdgeInsets.only(top: r.h(4)),
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -37,16 +37,17 @@ class TrendingSection extends StatelessWidget {
         itemCount: products.length,
         itemBuilder: (_, i) => ScrollReveal(
           scrollNotifier: scrollNotifier,
-          delay: Duration(milliseconds: 55 * i),
-          duration: const Duration(milliseconds: 680),
+          delay: Duration(milliseconds: 50 * i),
+          duration: const Duration(milliseconds: 700),
           fromOffset: Offset(i.isEven ? -18 : 18, 20),
           fromScale: 0.955,
           fromBlur: 0,
           use3d: false,
-          triggerFraction: 1.02,
-          parallaxExtent: 16,
-          parallaxScale: 0.02,
-          minVisibleOpacity: 0.62,
+          triggerFraction: 0.99,
+          parallaxExtent: 20,
+          parallaxScale: 0.022,
+          minVisibleOpacity: 0.5,
+          exitDriftFactor: 0.64,
           child: ProductCard(
             product: products[i],
             onAddToCart: onAddToCart,

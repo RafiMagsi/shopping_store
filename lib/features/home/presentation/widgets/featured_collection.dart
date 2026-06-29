@@ -35,9 +35,11 @@ class FeaturedCollection extends StatelessWidget {
             child: ScrollReveal(
               scrollNotifier: scrollNotifier,
               delay: const Duration(milliseconds: 80),
-              fromOffset: const Offset(-30, 0),
-              parallaxExtent: 52,
-              parallaxScale: 0.06,
+              fromOffset: const Offset(-24, 0),
+              parallaxExtent: 40,
+              parallaxScale: 0.032,
+              minVisibleOpacity: 0.42,
+              exitDriftFactor: 0.7,
               child: _BigEditorialCard(r: r),
             ),
           ),
@@ -55,8 +57,11 @@ class FeaturedCollection extends StatelessWidget {
                   child: ScrollReveal(
                     scrollNotifier: scrollNotifier,
                     delay: const Duration(milliseconds: 180),
-                    fromOffset: const Offset(30, 0),
-                    parallaxExtent: 34,
+                    fromOffset: const Offset(20, 0),
+                    parallaxExtent: 22,
+                    parallaxScale: 0.02,
+                    minVisibleOpacity: 0.54,
+                    exitDriftFactor: 0.6,
                     child: _SmallCard(
                       r: r,
                       imageUrl: _FeaturedImg.bag,
@@ -73,8 +78,11 @@ class FeaturedCollection extends StatelessWidget {
                   child: ScrollReveal(
                     scrollNotifier: scrollNotifier,
                     delay: const Duration(milliseconds: 260),
-                    fromOffset: const Offset(30, 0),
-                    parallaxExtent: 34,
+                    fromOffset: const Offset(20, 0),
+                    parallaxExtent: 22,
+                    parallaxScale: 0.02,
+                    minVisibleOpacity: 0.54,
+                    exitDriftFactor: 0.6,
                     child: _SmallCard(
                       r: r,
                       imageUrl: _FeaturedImg.watch,
@@ -133,15 +141,15 @@ class _BigEditorialCardState extends State<_BigEditorialCard>
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [const Color(0xFFFFFCF8), const Color(0xFFF0E9DF)],
+          colors: [const Color(0xFFFFFBF6), const Color(0xFFF2EBE2)],
         ),
         borderRadius: BorderRadius.circular(r.r(20)),
         border: Border.all(color: AppColors.divider, width: 1),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 18,
-            offset: const Offset(0, 8),
+            color: Colors.black.withOpacity(0.055),
+            blurRadius: 16,
+            offset: const Offset(0, 7),
           ),
         ],
       ),
@@ -159,7 +167,7 @@ class _BigEditorialCardState extends State<_BigEditorialCard>
                 shape: BoxShape.circle,
                 gradient: RadialGradient(
                   colors: [
-                    AppColors.champagne.withOpacity(0.12),
+                    AppColors.champagne.withOpacity(0.09),
                     Colors.transparent,
                   ],
                 ),
@@ -176,7 +184,7 @@ class _BigEditorialCardState extends State<_BigEditorialCard>
             child: AnimatedBuilder(
               animation: _float,
               builder: (_, child) {
-                final dy = math.sin(_float.value * math.pi * 2) * 8.0;
+                final dy = math.sin(_float.value * math.pi * 2) * 6.0;
                 return Transform.translate(offset: Offset(0, dy), child: child);
               },
               child: _FramedProductVisual(
@@ -202,10 +210,10 @@ class _BigEditorialCardState extends State<_BigEditorialCard>
                     vertical: r.h(4),
                   ),
                   decoration: BoxDecoration(
-                    color: AppColors.champagne.withOpacity(0.18),
+                    color: AppColors.champagne.withOpacity(0.14),
                     borderRadius: BorderRadius.circular(r.r(6)),
                     border: Border.all(
-                      color: AppColors.champagne.withOpacity(0.22),
+                      color: AppColors.champagne.withOpacity(0.18),
                       width: 1,
                     ),
                   ),
@@ -261,7 +269,7 @@ class _BigEditorialCardState extends State<_BigEditorialCard>
                     borderRadius: BorderRadius.circular(r.r(10)),
                     boxShadow: [
                       BoxShadow(
-                        color: AppColors.champagne.withOpacity(0.18),
+                        color: AppColors.champagne.withOpacity(0.14),
                         blurRadius: 12,
                         offset: const Offset(0, 4),
                       ),

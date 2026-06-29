@@ -65,7 +65,7 @@ class _ScrollTilt3DState extends State<ScrollTilt3D>
     final distance = ((centerY - screenH / 2) / screenH).clamp(-0.7, 0.7);
     // Map: screen top → +max, screen center → 0, screen bottom → -max
     _targetTilt = (distance * 0.28 * widget.intensity).clamp(-0.18, 0.18);
-    _targetLift = (-distance * 22 * widget.intensity).clamp(-18.0, 18.0);
+    _targetLift = (-distance * 28 * widget.intensity).clamp(-22.0, 22.0);
   }
 
   void _smoothUpdate() {

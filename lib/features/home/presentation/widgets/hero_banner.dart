@@ -68,7 +68,7 @@ class _HeroBannerState extends State<HeroBanner> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     final r = context.r;
     final scroll = widget.scrollOffset;
-    final bannerH = r.h(620);
+    final bannerH = r.h(610);
     final fadeT = (scroll / 260).clamp(0.0, 1.0);
 
     return SizedBox(
@@ -100,9 +100,9 @@ class _HeroBannerState extends State<HeroBanner> with TickerProviderStateMixin {
                 animation: _autoPlay,
                 builder: (_, __) => LinearProgressIndicator(
                   value: _autoPlay.value,
-                  backgroundColor: AppColors.divider.withOpacity(0.55),
+                  backgroundColor: AppColors.divider.withOpacity(0.46),
                   valueColor: AlwaysStoppedAnimation(
-                    (widget.slides[_page]['accent'] as Color).withOpacity(0.70),
+                    (widget.slides[_page]['accent'] as Color).withOpacity(0.62),
                   ),
                   minHeight: 2,
                 ),
@@ -111,7 +111,7 @@ class _HeroBannerState extends State<HeroBanner> with TickerProviderStateMixin {
 
             // Page dots
             Positioned(
-              bottom: r.h(28),
+              bottom: r.h(26),
               left: r.w(24),
               child: Row(
                 children: List.generate(widget.slides.length, (i) {
@@ -121,8 +121,8 @@ class _HeroBannerState extends State<HeroBanner> with TickerProviderStateMixin {
                     duration: const Duration(milliseconds: 350),
                     curve: Curves.easeOutCubic,
                     margin: EdgeInsets.only(right: r.w(6)),
-                    width: active ? r.w(28) : r.w(5),
-                    height: r.h(5),
+                    width: active ? r.w(24) : r.w(6),
+                    height: r.h(4),
                     decoration: BoxDecoration(
                       color: active
                           ? accent
@@ -132,7 +132,7 @@ class _HeroBannerState extends State<HeroBanner> with TickerProviderStateMixin {
                           ? [
                               BoxShadow(
                                 color: accent.withOpacity(0.18),
-                                blurRadius: 10,
+                                blurRadius: 8,
                               ),
                             ]
                           : null,
@@ -148,14 +148,14 @@ class _HeroBannerState extends State<HeroBanner> with TickerProviderStateMixin {
               left: 0,
               right: 0,
               child: Container(
-                height: r.h(88),
+                height: r.h(76),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
                       Colors.transparent,
-                      AppColors.bg.withOpacity(0.92),
+                      AppColors.bg.withOpacity(0.96),
                     ],
                   ),
                 ),
@@ -240,7 +240,7 @@ class _HeroSlideState extends State<_HeroSlide>
           child: Image.network(
             imageUrl,
             fit: BoxFit.cover,
-            color: Colors.white.withOpacity(0.58),
+            color: Colors.white.withOpacity(0.52),
             colorBlendMode: BlendMode.screen,
             loadingBuilder: (_, child, prog) =>
                 prog == null ? child : const SizedBox(),
@@ -255,7 +255,7 @@ class _HeroSlideState extends State<_HeroSlide>
               gradient: RadialGradient(
                 center: const Alignment(-1.0, 0.9),
                 radius: 1.1,
-                colors: [accent.withOpacity(0.10), Colors.transparent],
+                colors: [accent.withOpacity(0.08), Colors.transparent],
               ),
             ),
           ),
@@ -268,8 +268,8 @@ class _HeroSlideState extends State<_HeroSlide>
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Colors.white.withOpacity(0.10),
-                  const Color(0xFFF8F6F2).withOpacity(0.88),
+                  Colors.white.withOpacity(0.06),
+                  const Color(0xFFF7F4EE).withOpacity(0.90),
                 ],
               ),
             ),
@@ -278,37 +278,37 @@ class _HeroSlideState extends State<_HeroSlide>
 
         // 5 — Floating product showcase
         Positioned(
-          top: r.h(84),
-          right: r.w(10),
-          width: r.w(174),
-          height: r.h(204),
+          top: r.h(92),
+          right: r.w(12),
+          width: r.w(170),
+          height: r.h(198),
           child: AnimatedBuilder(
             animation: Listenable.merge([widget.float, _enter]),
             builder: (_, __) {
               final floatT = widget.float.value;
-              final dy = math.sin(floatT * math.pi * 2) * 10.0;
-              final dx = math.cos(floatT * math.pi * 2) * 3.0;
+              final dy = math.sin(floatT * math.pi * 2) * 7.0;
+              final dx = math.cos(floatT * math.pi * 2) * 2.0;
               final enterT = CurvedAnimation(
                 parent: _enter,
                 curve: Curves.easeOutExpo,
               ).value.clamp(0.0, 1.0);
 
               return Transform.translate(
-                offset: Offset(dx, dy + (1.0 - enterT) * 70),
+                offset: Offset(dx, dy + (1.0 - enterT) * 54),
                 child: Opacity(
                   opacity: enterT,
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
                       Container(
-                        width: r.w(182),
-                        height: r.w(182),
+                        width: r.w(170),
+                        height: r.w(170),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           gradient: RadialGradient(
                             colors: [
-                              accent.withOpacity(0.10),
-                              accent.withOpacity(0.03),
+                              accent.withOpacity(0.08),
+                              accent.withOpacity(0.02),
                               Colors.transparent,
                             ],
                             stops: const [0.0, 0.5, 1.0],
@@ -331,9 +331,9 @@ class _HeroSlideState extends State<_HeroSlide>
 
         // 6 — Editorial text content (bottom zone)
         Positioned(
-          bottom: r.h(65),
-          left: r.w(24),
-          right: r.w(132),
+          bottom: r.h(44),
+          left: r.w(30),
+          right: r.w(30),
           child: AnimatedBuilder(
             animation: _enter,
             builder: (_, __) {
@@ -359,7 +359,7 @@ class _HeroSlideState extends State<_HeroSlide>
                     ),
                   ),
 
-                  SizedBox(height: r.h(14)),
+                  SizedBox(height: r.h(12)),
 
                   // Oversized editorial headline
                   Opacity(
@@ -371,16 +371,16 @@ class _HeroSlideState extends State<_HeroSlide>
                         maxLines: 2,
                         style: TextStyle(
                           color: AppColors.textPrimary,
-                          fontSize: r.sp(42),
+                          fontSize: r.sp(39),
                           fontWeight: FontWeight.w900,
-                          letterSpacing: -1.6,
-                          height: 1.0,
+                          letterSpacing: -1.4,
+                          height: 1.02,
                         ),
                       ),
                     ),
                   ),
 
-                  SizedBox(height: r.h(11)),
+                  SizedBox(height: r.h(10)),
 
                   // Subtitle
                   Opacity(
@@ -391,16 +391,16 @@ class _HeroSlideState extends State<_HeroSlide>
                         d['subtitle'] as String,
                         style: TextStyle(
                           color: AppColors.textSecondary,
-                          fontSize: r.sp(12),
+                          fontSize: r.sp(12.5),
                           fontWeight: FontWeight.w400,
-                          letterSpacing: 0.3,
-                          height: 1.45,
+                          letterSpacing: 0.15,
+                          height: 1.38,
                         ),
                       ),
                     ),
                   ),
 
-                  SizedBox(height: r.h(22)),
+                  SizedBox(height: r.h(18)),
 
                   // CTA buttons
                   Opacity(
@@ -449,60 +449,60 @@ class _FloatingProductFrame extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: r.w(164),
-      height: r.h(184),
+      width: r.w(160),
+      height: r.h(180),
       child: Stack(
         alignment: Alignment.center,
         children: [
           Positioned(
-            top: r.h(14),
+            top: r.h(12),
             left: r.w(12),
             right: r.w(12),
             bottom: r.h(8),
             child: DecoratedBox(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(r.r(30)),
+                borderRadius: BorderRadius.circular(r.r(28)),
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                    Colors.white.withOpacity(0.35),
-                    Colors.white.withOpacity(0.12),
+                    Colors.white.withOpacity(0.30),
+                    Colors.white.withOpacity(0.10),
                   ],
                 ),
-                border: Border.all(color: Colors.white.withOpacity(0.55)),
+                border: Border.all(color: Colors.white.withOpacity(0.48)),
               ),
             ),
           ),
           Container(
-            width: r.w(146),
-            height: r.h(166),
+            width: r.w(142),
+            height: r.h(162),
             padding: EdgeInsets.fromLTRB(r.w(12), r.h(12), r.w(12), r.h(10)),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(r.r(28)),
+              borderRadius: BorderRadius.circular(r.r(26)),
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  const Color(0xFFFFFCF8).withOpacity(0.98),
-                  const Color(0xFFF4EEE6).withOpacity(0.96),
+                  const Color(0xFFFFFBF6).withOpacity(0.98),
+                  const Color(0xFFF3ECE3).withOpacity(0.96),
                 ],
               ),
               border: Border.all(
-                color: Colors.white.withOpacity(0.75),
+                color: Colors.white.withOpacity(0.68),
                 width: 1.1,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
-                  blurRadius: 14,
-                  offset: const Offset(0, 6),
+                  color: Colors.black.withOpacity(0.035),
+                  blurRadius: 12,
+                  offset: const Offset(0, 5),
                   spreadRadius: -8,
                 ),
                 BoxShadow(
-                  color: accent.withOpacity(0.06),
-                  blurRadius: 12,
-                  offset: const Offset(0, 5),
+                  color: accent.withOpacity(0.045),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
                   spreadRadius: -8,
                 ),
               ],
@@ -521,7 +521,7 @@ class _FloatingProductFrame extends StatelessWidget {
                           vertical: r.h(5),
                         ),
                         decoration: BoxDecoration(
-                          color: accent.withOpacity(0.10),
+                          color: accent.withOpacity(0.08),
                           borderRadius: BorderRadius.circular(r.r(20)),
                         ),
                         child: Text(
@@ -537,14 +537,14 @@ class _FloatingProductFrame extends StatelessWidget {
                       const Spacer(),
                       Icon(
                         Icons.diamond_outlined,
-                        color: accent.withOpacity(0.55),
+                        color: accent.withOpacity(0.42),
                         size: r.sp(16),
                       ),
                     ],
                   ),
                 ),
                 Positioned.fill(
-                  top: r.h(22),
+                  top: r.h(20),
                   child: DecoratedBox(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(r.r(20)),
@@ -552,9 +552,9 @@ class _FloatingProductFrame extends StatelessWidget {
                         center: const Alignment(0, -0.2),
                         radius: 0.95,
                         colors: [
-                          accent.withOpacity(0.09),
+                          accent.withOpacity(0.07),
                           const Color(0xFFFBF7F1),
-                          const Color(0xFFF0E8DD),
+                          const Color(0xFFF2E9DE),
                         ],
                         stops: const [0.0, 0.52, 1.0],
                       ),
