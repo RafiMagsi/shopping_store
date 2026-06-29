@@ -40,6 +40,8 @@ class HomeMockData {
   List<Map<String, dynamic>> get heroSlides => [
     {
       'imageUrl': _Img.hero1,
+      'productUrl': _Img.handbag,
+      'emoji': '👜',
       'tag': 'SUMMER DROP',
       'title': 'Elevate\nYour Style',
       'subtitle': 'Curated fashion from top brands',
@@ -48,6 +50,8 @@ class HomeMockData {
     },
     {
       'imageUrl': _Img.hero2,
+      'productUrl': _Img.headphones,
+      'emoji': '🎧',
       'tag': 'TECH LAUNCH',
       'title': 'Next-Gen\nDevices',
       'subtitle': 'Experience tomorrow, today',
@@ -56,6 +60,8 @@ class HomeMockData {
     },
     {
       'imageUrl': _Img.hero3,
+      'productUrl': _Img.sneakers,
+      'emoji': '👟',
       'tag': 'FLASH DROPS',
       'title': 'Move Fast,\nSave Big',
       'subtitle': 'Limited drops, exclusive deals',

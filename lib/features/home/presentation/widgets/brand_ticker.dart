@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/utils/responsive.dart';
-import 'scroll_reveal.dart';
 
 // Brand data: name + Clearbit logo URL
 class _Brand {
@@ -66,11 +65,8 @@ class _BrandTickerState extends State<BrandTicker>
   Widget build(BuildContext context) {
     final r = context.r;
 
-    return ScrollReveal(
-      scrollNotifier: widget.scrollNotifier,
-      fromOffset: const Offset(0, 20),
-      fromBlur: 0,
-      child: Column(
+    // Section-level animation handled by page-entrance system in home_page.dart
+    return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Section label
@@ -141,7 +137,6 @@ class _BrandTickerState extends State<BrandTicker>
             ),
           ),
         ],
-      ),
     );
   }
 }
