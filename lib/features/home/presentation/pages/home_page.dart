@@ -14,6 +14,7 @@ import '../widgets/brand_ticker.dart';
 import '../widgets/bottom_nav_bar.dart';
 import '../widgets/scroll_tilt.dart';
 import '../widgets/scroll_reveal.dart';
+import '../widgets/section_snap_scroll_physics.dart';
 import '../widgets/product_card.dart';
 import '../../domain/entities/product.dart';
 
@@ -29,13 +30,23 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
+  final _scrollViewKey = GlobalKey();
   final _scrollCtrl = ScrollController();
   final _scrollNotifier = ValueNotifier<double>(0.0);
+  final _heroKey = GlobalKey();
+  final _categoriesKey = GlobalKey();
+  final _hotDealsKey = GlobalKey();
+  final _flashSaleKey = GlobalKey();
+  final _featuredKey = GlobalKey();
+  final _trendingKey = GlobalKey();
+  final _brandsKey = GlobalKey();
 
   double _scrollOffset = 0;
   double _velocity = 0;
   double _lastOffset = 0;
   int _lastMs = 0;
+  List<double> _sectionAnchors = const [0];
+  bool _sectionMeasureScheduled = false;
 
   // ── Entrance animation ──────────────────────────────────────────────────
   late final AnimationController _entranceCtrl;
@@ -102,6 +113,52 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     });
   }
 
+  void _scheduleSectionMeasurement() {
+    if (_sectionMeasureScheduled) return;
+    _sectionMeasureScheduled = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _sectionMeasureScheduled = false;
+      _measureSectionAnchors();
+    });
+  }
+
+  void _measureSectionAnchors() {
+    if (!mounted) return;
+    final scrollBox =
+        _scrollViewKey.currentContext?.findRenderObject() as RenderBox?;
+    if (scrollBox == null || !scrollBox.attached) return;
+
+    final scrollTop = scrollBox.localToGlobal(Offset.zero).dy;
+    final keys = [
+      _heroKey,
+      _categoriesKey,
+      _hotDealsKey,
+      _flashSaleKey,
+      _featuredKey,
+      _trendingKey,
+      _brandsKey,
+    ];
+
+    final anchors = <double>[];
+    for (final key in keys) {
+      final box = key.currentContext?.findRenderObject() as RenderBox?;
+      if (box == null || !box.attached) continue;
+      final dy = box.localToGlobal(Offset.zero).dy - scrollTop;
+      anchors.add((_scrollCtrl.hasClients ? _scrollCtrl.offset : 0) + dy);
+    }
+
+    if (_sameAnchors(_sectionAnchors, anchors)) return;
+    setState(() => _sectionAnchors = anchors);
+  }
+
+  bool _sameAnchors(List<double> a, List<double> b) {
+    if (a.length != b.length) return false;
+    for (var i = 0; i < a.length; i++) {
+      if ((a[i] - b[i]).abs() > 1.5) return false;
+    }
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     final r = context.r;
@@ -112,6 +169,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
         // Fire entrance animation as soon as content is ready
         if (state.status == HomeStatus.loaded) _triggerEntrance();
+        if (state.status == HomeStatus.loaded) _scheduleSectionMeasurement();
+        final snapInset = r.h(82);
 
         return Scaffold(
           backgroundColor: AppColors.bg,
@@ -132,35 +191,49 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           body: state.status == HomeStatus.loading
               ? const _LoadingShimmer()
               : CustomScrollView(
+                  key: _scrollViewKey,
                   controller: _scrollCtrl,
-                  physics: const BouncingScrollPhysics(
-                    parent: AlwaysScrollableScrollPhysics(),
+                  physics: SectionSnapScrollPhysics(
+                    anchors: _sectionAnchors,
+                    topInset: snapInset,
+                    parent: const BouncingScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics(),
+                    ),
+                  ),
+                  scrollBehavior: const MaterialScrollBehavior().copyWith(
+                    overscroll: false,
                   ),
                   slivers: [
                     // ── Hero ─────────────────────────────────────────────
                     SliverToBoxAdapter(
-                      child: _Entrance(
-                        animation: _anim[0],
-                        fromOffset: const Offset(0, -0.5),
-                        child: HeroBanner(
-                          scrollOffset: _scrollOffset,
-                          scrollVelocity: _velocity,
-                          slides: state.heroSlides,
+                      child: KeyedSubtree(
+                        key: _heroKey,
+                        child: _Entrance(
+                          animation: _anim[0],
+                          fromOffset: const Offset(0, -0.5),
+                          child: HeroBanner(
+                            scrollOffset: _scrollOffset,
+                            scrollVelocity: _velocity,
+                            slides: state.heroSlides,
+                          ),
                         ),
                       ),
                     ),
 
                     // ── Categories ────────────────────────────────────────
                     SliverToBoxAdapter(
-                      child: _ScrollSectionReveal(
-                        scrollNotifier: _scrollNotifier,
-                        delay: const Duration(milliseconds: 40),
-                        fromOffset: const Offset(-0.18, 0),
-                        child: _SectionTitle(
-                          overline: 'BROWSE BY',
-                          title: 'Categories',
-                          accent: AppColors.champagne,
-                          r: r,
+                      child: KeyedSubtree(
+                        key: _categoriesKey,
+                        child: _ScrollSectionReveal(
+                          scrollNotifier: _scrollNotifier,
+                          delay: const Duration(milliseconds: 40),
+                          fromOffset: const Offset(-0.18, 0),
+                          child: _SectionTitle(
+                            overline: 'BROWSE BY',
+                            title: 'Categories',
+                            accent: AppColors.champagne,
+                            r: r,
+                          ),
                         ),
                       ),
                     ),
@@ -183,15 +256,18 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
                     // ── Hot Deals ─────────────────────────────────────────
                     SliverToBoxAdapter(
-                      child: _ScrollSectionReveal(
-                        scrollNotifier: _scrollNotifier,
-                        delay: const Duration(milliseconds: 50),
-                        fromOffset: const Offset(0.18, 0),
-                        child: _SectionTitle(
-                          overline: "TODAY'S PICKS",
-                          title: 'Hot Deals',
-                          accent: AppColors.rose,
-                          r: r,
+                      child: KeyedSubtree(
+                        key: _hotDealsKey,
+                        child: _ScrollSectionReveal(
+                          scrollNotifier: _scrollNotifier,
+                          delay: const Duration(milliseconds: 50),
+                          fromOffset: const Offset(0.18, 0),
+                          child: _SectionTitle(
+                            overline: "TODAY'S PICKS",
+                            title: 'Hot Deals',
+                            accent: AppColors.rose,
+                            r: r,
+                          ),
                         ),
                       ),
                     ),
@@ -208,15 +284,18 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
                     // ── Flash Sale ────────────────────────────────────────
                     SliverToBoxAdapter(
-                      child: _ScrollSectionReveal(
-                        scrollNotifier: _scrollNotifier,
-                        delay: const Duration(milliseconds: 40),
-                        fromOffset: const Offset(0, 0.12),
-                        child: _SectionTitle(
-                          overline: '⚡ LIMITED TIME',
-                          title: 'Flash Sale',
-                          accent: AppColors.roseDeep,
-                          r: r,
+                      child: KeyedSubtree(
+                        key: _flashSaleKey,
+                        child: _ScrollSectionReveal(
+                          scrollNotifier: _scrollNotifier,
+                          delay: const Duration(milliseconds: 40),
+                          fromOffset: const Offset(0, 0.12),
+                          child: _SectionTitle(
+                            overline: '⚡ LIMITED TIME',
+                            title: 'Flash Sale',
+                            accent: AppColors.roseDeep,
+                            r: r,
+                          ),
                         ),
                       ),
                     ),
@@ -237,15 +316,18 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
                     // ── Featured ──────────────────────────────────────────
                     SliverToBoxAdapter(
-                      child: _ScrollSectionReveal(
-                        scrollNotifier: _scrollNotifier,
-                        delay: const Duration(milliseconds: 40),
-                        fromOffset: const Offset(-0.14, 0),
-                        child: _SectionTitle(
-                          overline: 'EDITORIAL',
-                          title: 'Featured',
-                          accent: AppColors.champagne,
-                          r: r,
+                      child: KeyedSubtree(
+                        key: _featuredKey,
+                        child: _ScrollSectionReveal(
+                          scrollNotifier: _scrollNotifier,
+                          delay: const Duration(milliseconds: 40),
+                          fromOffset: const Offset(-0.14, 0),
+                          child: _SectionTitle(
+                            overline: 'EDITORIAL',
+                            title: 'Featured',
+                            accent: AppColors.champagne,
+                            r: r,
+                          ),
                         ),
                       ),
                     ),
@@ -265,15 +347,18 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
                     // ── Trending ──────────────────────────────────────────
                     SliverToBoxAdapter(
-                      child: _ScrollSectionReveal(
-                        scrollNotifier: _scrollNotifier,
-                        delay: const Duration(milliseconds: 45),
-                        fromOffset: const Offset(0, 0),
-                        child: _SectionTitle(
-                          overline: 'POPULAR NOW',
-                          title: 'Trending',
-                          accent: AppColors.ice,
-                          r: r,
+                      child: KeyedSubtree(
+                        key: _trendingKey,
+                        child: _ScrollSectionReveal(
+                          scrollNotifier: _scrollNotifier,
+                          delay: const Duration(milliseconds: 45),
+                          fromOffset: const Offset(0, 0),
+                          child: _SectionTitle(
+                            overline: 'POPULAR NOW',
+                            title: 'Trending',
+                            accent: AppColors.ice,
+                            r: r,
+                          ),
                         ),
                       ),
                     ),
@@ -290,21 +375,23 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
                     // ── Brand Ticker ──────────────────────────────────────
                     SliverToBoxAdapter(
-                      child: _ScrollSectionReveal(
-                        scrollNotifier: _scrollNotifier,
-                        delay: const Duration(milliseconds: 50),
-                        fromOffset: const Offset(0, 0.12),
-                        child: Padding(
-                          padding: EdgeInsets.only(bottom: r.h(20)),
-                          child: BrandTicker(
-                            brands: state.brands,
-                            scrollNotifier: _scrollNotifier,
+                      child: KeyedSubtree(
+                        key: _brandsKey,
+                        child: _ScrollSectionReveal(
+                          scrollNotifier: _scrollNotifier,
+                          delay: const Duration(milliseconds: 50),
+                          fromOffset: const Offset(0, 0.12),
+                          child: Padding(
+                            padding: EdgeInsets.only(bottom: r.h(20)),
+                            child: BrandTicker(
+                              brands: state.brands,
+                              scrollNotifier: _scrollNotifier,
+                            ),
                           ),
                         ),
                       ),
                     ),
 
-                    // Footer spacer
                     SliverToBoxAdapter(child: SizedBox(height: r.h(80))),
                   ],
                 ),
