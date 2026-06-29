@@ -116,7 +116,7 @@ class _DealCardState extends State<_DealCard> with SingleTickerProviderStateMixi
           width: r.w(200),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(r.r(24)),
-            border: Border.all(color: AppColors.glassBorder, width: 1),
+            border: Border.all(color: AppColors.divider, width: 1),
             boxShadow: [
               BoxShadow(color: Colors.black.withOpacity(0.5), blurRadius: 30, offset: const Offset(0, 12)),
               BoxShadow(color: accent.withOpacity(0.18), blurRadius: 40, offset: const Offset(0, 20)),

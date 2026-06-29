@@ -63,9 +63,10 @@ class _FlashSaleSectionState extends State<FlashSaleSection>
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: r.w(20)),
         decoration: BoxDecoration(
-          gradient: AppColors.flashGradient,
-          borderRadius: BorderRadius.circular(r.r(24)),
-          border: Border.all(color: AppColors.pinkDeep.withOpacity(0.3), width: 1),
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(r.r(20)),
+          border: Border.all(color: AppColors.divider, width: 1),
+          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 16, offset: Offset(0, 4))],
         ),
         child: Column(
           children: [
@@ -84,11 +85,11 @@ class _FlashSaleSectionState extends State<FlashSaleSection>
                     child: Container(
                       padding: EdgeInsets.all(r.w(8)),
                       decoration: BoxDecoration(
-                        color: AppColors.pinkDeep,
+                        color: AppColors.roseDeep,
                         borderRadius: BorderRadius.circular(r.r(10)),
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.pinkDeep.withOpacity(0.5),
+                            color: AppColors.roseDeep.withOpacity(0.5),
                             blurRadius: 12,
                             spreadRadius: 1,
                           ),
@@ -107,7 +108,7 @@ class _FlashSaleSectionState extends State<FlashSaleSection>
                       Text(
                         'FLASH SALE',
                         style: AppTextStyles.overline.copyWith(
-                          color: AppColors.pink,
+                          color: AppColors.rose,
                           fontSize: r.sp(11),
                         ),
                       ),
@@ -172,7 +173,7 @@ class _FlipDigit extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.card,
           borderRadius: BorderRadius.circular(r.r(8)),
-          border: Border.all(color: AppColors.glassBorder, width: 1),
+          border: Border.all(color: AppColors.divider, width: 1),
         ),
         child: Center(
           child: Text(
@@ -200,7 +201,7 @@ class _DigitSep extends StatelessWidget {
     child: Text(
       ':',
       style: TextStyle(
-        color: AppColors.pink,
+        color: AppColors.rose,
         fontSize: r.sp(18),
         fontWeight: FontWeight.w900,
       ),
@@ -259,7 +260,7 @@ class _FlashItemState extends State<_FlashItem>
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.04),
         borderRadius: BorderRadius.circular(r.r(16)),
-        border: Border.all(color: AppColors.glassBorder, width: 1),
+        border: Border.all(color: AppColors.divider, width: 1),
       ),
       child: Row(
         children: [
@@ -308,7 +309,7 @@ class _FlashItemState extends State<_FlashItem>
                       padding: EdgeInsets.symmetric(
                           horizontal: r.w(5), vertical: r.h(2)),
                       decoration: BoxDecoration(
-                        color: AppColors.pinkDeep,
+                        color: AppColors.roseDeep,
                         borderRadius: BorderRadius.circular(r.r(4)),
                       ),
                       child: Text(
@@ -336,7 +337,7 @@ class _FlashItemState extends State<_FlashItem>
                             builder: (_, __) => LinearProgressIndicator(
                               value: _bar.value,
                               backgroundColor: AppColors.textMuted.withOpacity(0.3),
-                              valueColor: AlwaysStoppedAnimation(AppColors.pink),
+                              valueColor: AlwaysStoppedAnimation(AppColors.rose),
                             ),
                           ),
                         ),
@@ -346,7 +347,7 @@ class _FlashItemState extends State<_FlashItem>
                     Text(
                       '${p.soldPercent}% sold',
                       style: AppTextStyles.bodyS.copyWith(
-                        color: AppColors.pink, fontSize: r.sp(10),
+                        color: AppColors.rose, fontSize: r.sp(10),
                         fontWeight: FontWeight.w600,
                       ),
                     ),

@@ -16,6 +16,7 @@ import '../widgets/brand_ticker.dart';
 import '../widgets/bottom_nav_bar.dart';
 import '../widgets/scroll_tilt.dart';
 import '../widgets/product_card.dart';
+import '../widgets/scroll_reveal.dart';
 import '../../domain/entities/product.dart';
 
 class HomePage extends StatefulWidget {
@@ -45,7 +46,7 @@ class _HomePageState extends State<HomePage> {
     final offset = _scrollCtrl.offset;
     final now = DateTime.now().millisecondsSinceEpoch;
     final dt = (now - _lastMs).clamp(1, 100);
-    _velocity = (offset - _lastOffset) / dt * 16; // normalize to ~60fps frame
+    _velocity = (offset - _lastOffset) / dt * 16;
     _lastOffset = offset;
     _lastMs = now;
     _scrollNotifier.value = offset;
@@ -74,7 +75,7 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: AppColors.bg,
           extendBodyBehindAppBar: true,
           appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(80),
+            preferredSize: const Size.fromHeight(72),
             child: AppHeader(
               scrollOffset: _scrollOffset,
               cartCount: state.cartCount,
@@ -99,10 +100,14 @@ class _HomePageState extends State<HomePage> {
                     ),
 
                     // ── Categories ──────────────────────────────────────
-                    _SectionHeader(
-                      overline: 'BROWSE',
-                      title: 'Categories',
-                      icon: Icons.grid_view_rounded,
+                    SliverToBoxAdapter(
+                      child: _SectionTitle(
+                        overline: 'BROWSE BY',
+                        title: 'Categories',
+                        accent: AppColors.champagne,
+                        scrollNotifier: _scrollNotifier,
+                        r: r,
+                      ),
                     ),
                     SliverToBoxAdapter(
                       child: Padding(
@@ -117,16 +122,19 @@ class _HomePageState extends State<HomePage> {
                     ),
 
                     // ── Hot Deals ───────────────────────────────────────
-                    _SectionHeader(
-                      overline: '🔥 TODAY',
-                      title: 'Hot Deals',
-                      icon: Icons.local_fire_department_rounded,
-                      accentColor: AppColors.pink,
+                    SliverToBoxAdapter(
+                      child: _SectionTitle(
+                        overline: 'TODAY\'S PICKS',
+                        title: 'Hot Deals',
+                        accent: AppColors.rose,
+                        scrollNotifier: _scrollNotifier,
+                        r: r,
+                      ),
                     ),
                     SliverToBoxAdapter(
                       child: Padding(
-                        padding: EdgeInsets.only(bottom: r.h(8)),
-                        child: _HotDealsWithTilt(
+                        padding: EdgeInsets.only(bottom: r.h(28)),
+                        child: _HotDealsRow(
                           products: state.hotDeals,
                           scrollNotifier: _scrollNotifier,
                           onAddToCart: cubit.addToCart,
@@ -135,15 +143,18 @@ class _HomePageState extends State<HomePage> {
                     ),
 
                     // ── Flash Sale ──────────────────────────────────────
-                    _SectionHeader(
-                      overline: '⚡ LIMITED',
-                      title: 'Flash Sale',
-                      icon: Icons.bolt_rounded,
-                      accentColor: AppColors.pinkDeep,
+                    SliverToBoxAdapter(
+                      child: _SectionTitle(
+                        overline: '⚡ LIMITED TIME',
+                        title: 'Flash Sale',
+                        accent: AppColors.roseDeep,
+                        scrollNotifier: _scrollNotifier,
+                        r: r,
+                      ),
                     ),
                     SliverToBoxAdapter(
                       child: Padding(
-                        padding: EdgeInsets.only(bottom: r.h(8)),
+                        padding: EdgeInsets.only(bottom: r.h(28)),
                         child: FlashSaleSection(
                           items: state.flashSaleItems,
                           scrollNotifier: _scrollNotifier,
@@ -153,31 +164,35 @@ class _HomePageState extends State<HomePage> {
                     ),
 
                     // ── Featured ────────────────────────────────────────
-                    _SectionHeader(
-                      overline: '✦ EDITORIAL',
-                      title: 'Featured',
-                      icon: Icons.auto_awesome_rounded,
-                      accentColor: AppColors.amber,
+                    SliverToBoxAdapter(
+                      child: _SectionTitle(
+                        overline: 'EDITORIAL',
+                        title: 'Featured',
+                        accent: AppColors.champagne,
+                        scrollNotifier: _scrollNotifier,
+                        r: r,
+                      ),
                     ),
                     SliverToBoxAdapter(
                       child: Padding(
-                        padding: EdgeInsets.only(bottom: r.h(8)),
-                        child: FeaturedCollection(
-                          scrollNotifier: _scrollNotifier,
-                        ),
+                        padding: EdgeInsets.only(bottom: r.h(28)),
+                        child: FeaturedCollection(scrollNotifier: _scrollNotifier),
                       ),
                     ),
 
                     // ── Trending ────────────────────────────────────────
-                    _SectionHeader(
-                      overline: '📈 POPULAR',
-                      title: 'Trending',
-                      icon: Icons.trending_up_rounded,
-                      accentColor: AppColors.emerald,
+                    SliverToBoxAdapter(
+                      child: _SectionTitle(
+                        overline: 'POPULAR NOW',
+                        title: 'Trending',
+                        accent: AppColors.ice,
+                        scrollNotifier: _scrollNotifier,
+                        r: r,
+                      ),
                     ),
                     SliverToBoxAdapter(
                       child: Padding(
-                        padding: EdgeInsets.only(bottom: r.h(8)),
+                        padding: EdgeInsets.only(bottom: r.h(28)),
                         child: TrendingSection(
                           products: state.trending,
                           scrollNotifier: _scrollNotifier,
@@ -187,20 +202,20 @@ class _HomePageState extends State<HomePage> {
                     ),
 
                     // ── Brands ──────────────────────────────────────────
-                    _SectionHeader(
-                      overline: 'PARTNERS',
-                      title: 'Top Brands',
-                      icon: Icons.verified_rounded,
-                    ),
                     SliverToBoxAdapter(
-                      child: BrandTicker(
-                        brands: state.brands,
-                        scrollNotifier: _scrollNotifier,
+                      child: Padding(
+                        padding: EdgeInsets.only(bottom: r.h(20)),
+                        child: BrandTicker(
+                          brands: state.brands,
+                          scrollNotifier: _scrollNotifier,
+                        ),
                       ),
                     ),
 
-                    // Footer spacer
-                    const SliverToBoxAdapter(child: SizedBox(height: 60)),
+                    // Footer spacer for bottom nav
+                    SliverToBoxAdapter(
+                      child: SizedBox(height: r.h(80)),
+                    ),
                   ],
                 ),
 
@@ -215,185 +230,112 @@ class _HomePageState extends State<HomePage> {
 }
 
 // ───────────────────────────────────────────────────────────────────────────
-// Sticky morphing section header
+// Simple non-sticky section title
 // ───────────────────────────────────────────────────────────────────────────
 
-class _SectionHeader extends StatelessWidget {
+class _SectionTitle extends StatelessWidget {
   final String overline;
   final String title;
-  final IconData icon;
-  final Color accentColor;
+  final Color accent;
+  final ValueNotifier<double> scrollNotifier;
+  final R r;
+  final String? actionLabel;
+  final VoidCallback? onAction;
 
-  const _SectionHeader({
+  const _SectionTitle({
     required this.overline,
     required this.title,
-    required this.icon,
-    this.accentColor = AppColors.amber,
+    required this.accent,
+    required this.scrollNotifier,
+    required this.r,
+    this.actionLabel,
+    this.onAction,
   });
 
   @override
   Widget build(BuildContext context) {
-    return SliverPersistentHeader(
-      pinned: true,
-      delegate: _SectionDelegate(
-        overline: overline,
-        title: title,
-        icon: icon,
-        accent: accentColor,
+    return ScrollReveal(
+      scrollNotifier: scrollNotifier,
+      fromOffset: const Offset(0, 20),
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(r.w(20), r.h(4), r.w(20), r.h(14)),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  overline,
+                  style: TextStyle(
+                    color: accent,
+                    fontSize: r.sp(10),
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 1.5,
+                  ),
+                ),
+                SizedBox(height: r.h(2)),
+                Text(
+                  title,
+                  style: TextStyle(
+                    color: AppColors.textPrimary,
+                    fontSize: r.sp(22),
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: -0.5,
+                    height: 1.1,
+                  ),
+                ),
+              ],
+            ),
+            const Spacer(),
+            GestureDetector(
+              onTap: onAction,
+              child: Row(
+                children: [
+                  Text(
+                    actionLabel ?? 'See All',
+                    style: TextStyle(
+                      color: AppColors.champagne,
+                      fontSize: r.sp(12),
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  SizedBox(width: r.w(3)),
+                  Icon(
+                    Icons.arrow_forward_ios_rounded,
+                    color: AppColors.champagne,
+                    size: r.sp(11),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
-class _SectionDelegate extends SliverPersistentHeaderDelegate {
-  final String overline;
-  final String title;
-  final IconData icon;
-  final Color accent;
-
-  const _SectionDelegate({
-    required this.overline,
-    required this.title,
-    required this.icon,
-    required this.accent,
-  });
-
-  @override
-  double get maxExtent => 80.0;
-  @override
-  double get minExtent => 52.0;
-
-  @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    final r = context.r;
-    final t = (shrinkOffset / (maxExtent - minExtent)).clamp(0.0, 1.0);
-
-    return ClipRect(
-      child: BackdropFilter(
-        filter: ImageFilter.blur(
-          sigmaX: t * 24, sigmaY: t * 24,
-        ),
-        child: Container(
-          color: AppColors.bg.withOpacity(0.7 + t * 0.28),
-          child: Stack(
-            children: [
-              // Subtle bottom border that fades in as sticky
-              Positioned(
-                bottom: 0, left: 0, right: 0,
-                child: Opacity(
-                  opacity: t,
-                  child: Container(
-                    height: 1,
-                    color: AppColors.glassBorder,
-                  ),
-                ),
-              ),
-
-              // Accent line on left when sticky
-              Positioned(
-                left: 0, top: 12, bottom: 12,
-                child: AnimatedOpacity(
-                  opacity: t,
-                  duration: Duration.zero,
-                  child: Container(
-                    width: 3,
-                    decoration: BoxDecoration(
-                      color: accent,
-                      borderRadius: BorderRadius.circular(2),
-                      boxShadow: [
-                        BoxShadow(
-                          color: accent.withOpacity(0.5),
-                          blurRadius: 6,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-
-              // Content — morphs from large to compact
-              Padding(
-                padding: EdgeInsets.only(
-                  left: r.w(20 + t * 8),
-                  right: r.w(20),
-                  top: r.h(10 + (1 - t) * 8),
-                  bottom: r.h(6),
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    // Icon (visible when compact)
-                    if (t > 0.3)
-                      Padding(
-                        padding: EdgeInsets.only(right: r.w(10)),
-                        child: Opacity(
-                          opacity: ((t - 0.3) / 0.7).clamp(0.0, 1.0),
-                          child: Icon(icon, color: accent, size: r.sp(16)),
-                        ),
-                      ),
-
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // Overline fades out as compact
-                        if (t < 0.8)
-                          Opacity(
-                            opacity: (1 - t / 0.8).clamp(0.0, 1.0),
-                            child: Text(
-                              overline,
-                              style: AppTextStyles.overline.copyWith(
-                                color: accent,
-                                fontSize: r.sp(9),
-                              ),
-                            ),
-                          ),
-
-                        // Title — always visible, scales down
-                        Text(
-                          title,
-                          style: AppTextStyles.h1.copyWith(
-                            fontSize: r.sp(22 - t * 6),
-                            letterSpacing: -0.5 - t * 0.3,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  @override
-  bool shouldRebuild(_SectionDelegate old) =>
-      old.title != title || old.accent != accent;
-}
-
 // ───────────────────────────────────────────────────────────────────────────
-// Hot deals horizontal list with HorizontalTilt3D per card
+// Hot deals horizontal strip
 // ───────────────────────────────────────────────────────────────────────────
 
-class _HotDealsWithTilt extends StatefulWidget {
+class _HotDealsRow extends StatefulWidget {
   final List<Product> products;
   final ValueNotifier<double> scrollNotifier;
   final VoidCallback onAddToCart;
 
-  const _HotDealsWithTilt({
+  const _HotDealsRow({
     required this.products,
     required this.scrollNotifier,
     required this.onAddToCart,
   });
 
   @override
-  State<_HotDealsWithTilt> createState() => _HotDealsWithTiltState();
+  State<_HotDealsRow> createState() => _HotDealsRowState();
 }
 
-class _HotDealsWithTiltState extends State<_HotDealsWithTilt> {
+class _HotDealsRowState extends State<_HotDealsRow> {
   final _hScrollCtrl = ScrollController();
   final _hScrollNotifier = ValueNotifier<double>(0.0);
 
@@ -415,9 +357,9 @@ class _HotDealsWithTiltState extends State<_HotDealsWithTilt> {
   @override
   Widget build(BuildContext context) {
     final r = context.r;
-
+    // Fixed total card height: image(180) + details(100) = 280px
     return SizedBox(
-      height: r.h(296),
+      height: r.h(280),
       child: ListView.builder(
         controller: _hScrollCtrl,
         scrollDirection: Axis.horizontal,
@@ -430,11 +372,14 @@ class _HotDealsWithTiltState extends State<_HotDealsWithTilt> {
             padding: EdgeInsets.only(right: r.w(12)),
             child: HorizontalTilt3D(
               scrollNotifier: _hScrollNotifier,
-              child: ProductCard(
-                product: p,
-                width: r.w(172),
-                onAddToCart: widget.onAddToCart,
-                scrollNotifier: widget.scrollNotifier,
+              child: SizedBox(
+                width: r.w(168),
+                child: ProductCard(
+                  product: p,
+                  width: r.w(168),
+                  onAddToCart: widget.onAddToCart,
+                  scrollNotifier: widget.scrollNotifier,
+                ),
               ),
             ),
           );
@@ -468,10 +413,7 @@ class _LoadingShimmerState extends State<_LoadingShimmer>
   }
 
   @override
-  void dispose() {
-    _ctrl.dispose();
-    super.dispose();
-  }
+  void dispose() { _ctrl.dispose(); super.dispose(); }
 
   @override
   Widget build(BuildContext context) {
@@ -482,15 +424,15 @@ class _LoadingShimmerState extends State<_LoadingShimmer>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _ShimmerBlock(height: 520, value: _ctrl.value),
-            const SizedBox(height: 16),
-            _ShimmerBlock(height: 72, width: 180, value: _ctrl.value, hPad: 20),
-            const SizedBox(height: 8),
-            _ShimmerBlock(height: 80, value: _ctrl.value),
-            const SizedBox(height: 16),
-            _ShimmerBlock(height: 72, width: 150, value: _ctrl.value, hPad: 20),
-            const SizedBox(height: 8),
-            _ShimmerBlock(height: 290, value: _ctrl.value),
+            _Shimmer(height: 480, value: _ctrl.value),
+            const SizedBox(height: 20),
+            _Shimmer(height: 60, width: 160, value: _ctrl.value, hPad: 20),
+            const SizedBox(height: 12),
+            _Shimmer(height: 90, value: _ctrl.value),
+            const SizedBox(height: 24),
+            _Shimmer(height: 60, width: 120, value: _ctrl.value, hPad: 20),
+            const SizedBox(height: 12),
+            _Shimmer(height: 280, value: _ctrl.value),
           ],
         ),
       ),
@@ -498,17 +440,15 @@ class _LoadingShimmerState extends State<_LoadingShimmer>
   }
 }
 
-class _ShimmerBlock extends StatelessWidget {
+class _Shimmer extends StatelessWidget {
   final double height;
   final double? width;
   final double value;
   final double hPad;
 
-  const _ShimmerBlock({
-    required this.height,
-    required this.value,
-    this.width,
-    this.hPad = 0,
+  const _Shimmer({
+    required this.height, required this.value,
+    this.width, this.hPad = 0,
   });
 
   @override
@@ -524,9 +464,9 @@ class _ShimmerBlock extends StatelessWidget {
             begin: Alignment(value * 3 - 2.5, 0),
             end: Alignment(value * 3 - 1.5, 0),
             colors: const [
-              Color(0xFF141414),
-              Color(0xFF202020),
-              Color(0xFF141414),
+              Color(0xFFEFECE8),
+              Color(0xFFE2DDD8),
+              Color(0xFFEFECE8),
             ],
           ),
         ),

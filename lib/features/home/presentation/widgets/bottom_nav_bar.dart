@@ -31,13 +31,13 @@ class ShopBottomNavBar extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         border: Border(
-          top: BorderSide(color: AppColors.glassBorder, width: 1),
+          top: BorderSide(color: AppColors.divider, width: 1),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.5),
-            blurRadius: 30,
-            offset: const Offset(0, -8),
+            color: Colors.black.withOpacity(0.08),
+            blurRadius: 20,
+            offset: const Offset(0, -4),
           ),
         ],
       ),
@@ -106,7 +106,7 @@ class _NavTile extends StatelessWidget {
               width: isSelected ? r.w(44) : r.w(36),
               height: isSelected ? r.h(32) : r.h(28),
               decoration: BoxDecoration(
-                color: isSelected ? AppColors.violetMuted : Colors.transparent,
+                color: isSelected ? AppColors.champagneMuted : Colors.transparent,
                 borderRadius: BorderRadius.circular(r.r(10)),
               ),
               child: Center(
@@ -115,7 +115,7 @@ class _NavTile extends StatelessWidget {
                   child: Icon(
                     isSelected ? item.active : item.inactive,
                     key: ValueKey(isSelected),
-                    color: isSelected ? AppColors.violet : AppColors.textMuted,
+                    color: isSelected ? AppColors.champagne : AppColors.textMuted,
                     size: r.sp(22),
                   ),
                 ),
@@ -125,7 +125,7 @@ class _NavTile extends StatelessWidget {
             AnimatedDefaultTextStyle(
               duration: const Duration(milliseconds: 200),
               style: TextStyle(
-                color: isSelected ? AppColors.violet : AppColors.textMuted,
+                color: isSelected ? AppColors.champagne : AppColors.textMuted,
                 fontSize: r.sp(10),
                 fontWeight: isSelected ? FontWeight.w700 : FontWeight.w400,
                 letterSpacing: 0.2,

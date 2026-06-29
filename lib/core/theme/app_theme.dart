@@ -7,13 +7,13 @@ class AppTheme {
 
   static ThemeData get dark => ThemeData(
     useMaterial3: true,
-    brightness: Brightness.dark,
+    brightness: Brightness.light,
     scaffoldBackgroundColor: AppColors.bg,
-    colorScheme: const ColorScheme.dark(
-      primary: AppColors.violet,
-      secondary: AppColors.neon,
+    colorScheme: const ColorScheme.light(
+      primary: AppColors.champagne,
+      secondary: AppColors.rose,
       surface: AppColors.surface,
-      onPrimary: Colors.white,
+      onPrimary: AppColors.textInverse,
       onSurface: AppColors.textPrimary,
     ),
     fontFamily: 'SF Pro Display',
@@ -22,8 +22,8 @@ class AppTheme {
       elevation: 0,
       systemOverlayStyle: SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
-        statusBarIconBrightness: Brightness.light,
-        statusBarBrightness: Brightness.dark,
+        statusBarIconBrightness: Brightness.dark,
+        statusBarBrightness: Brightness.light,
       ),
     ),
   );

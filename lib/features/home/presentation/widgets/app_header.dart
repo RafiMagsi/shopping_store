@@ -61,16 +61,16 @@ class _AppHeaderState extends State<AppHeader>
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
-        statusBarIconBrightness: Brightness.light,
+        statusBarIconBrightness: Brightness.dark,
       ),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         decoration: BoxDecoration(
-          color: AppColors.bg.withOpacity(scrolled ? opacity * 0.95 : 0),
+          color: AppColors.surface.withOpacity(scrolled ? opacity * 0.96 : 0),
           border: scrolled
               ? Border(
                   bottom: BorderSide(
-                    color: AppColors.glassBorder,
+                    color: AppColors.divider,
                     width: opacity,
                   ),
                 )
@@ -224,9 +224,10 @@ class _IconBtn extends StatelessWidget {
         width: r.w(40),
         height: r.w(40),
         decoration: BoxDecoration(
-          color: AppColors.glass,
+          color: AppColors.surface,
           borderRadius: BorderRadius.circular(r.r(12)),
-          border: Border.all(color: AppColors.glassBorder, width: 1),
+          border: Border.all(color: AppColors.divider, width: 1),
+          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 8)],
         ),
         child: Icon(icon, color: AppColors.textPrimary, size: r.sp(20)),
       ),
@@ -261,9 +262,10 @@ class _CartBtn extends StatelessWidget {
             width: r.w(40),
             height: r.w(40),
             decoration: BoxDecoration(
-              color: AppColors.glass,
+              color: AppColors.surface,
               borderRadius: BorderRadius.circular(r.r(12)),
-              border: Border.all(color: AppColors.glassBorder, width: 1),
+              border: Border.all(color: AppColors.divider, width: 1),
+              boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 8)],
             ),
             child: Icon(Icons.shopping_bag_outlined,
                 color: AppColors.textPrimary, size: r.sp(20)),

@@ -36,36 +36,7 @@ class _CategoryStripState extends State<CategoryStrip> {
   @override
   Widget build(BuildContext context) {
     final r = context.r;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: r.w(20)),
-          child: ScrollReveal(
-            scrollNotifier: widget.scrollNotifier,
-            fromOffset: const Offset(-30, 0),
-            child: Row(
-              children: [
-                Text('Categories', style: AppTextStyles.h2.copyWith(fontSize: r.sp(20))),
-                const Spacer(),
-                Text(
-                  'See All',
-                  style: AppTextStyles.labelM.copyWith(
-                    color: AppColors.amber,
-                    fontSize: r.sp(12),
-                  ),
-                ),
-                SizedBox(width: r.w(4)),
-                Icon(Icons.arrow_forward_ios_rounded,
-                    color: AppColors.amber, size: r.sp(12)),
-              ],
-            ),
-          ),
-        ),
-
-        SizedBox(height: r.h(16)),
-
-        SizedBox(
+    return SizedBox(
           height: r.h(96),
           child: ListView.builder(
             controller: _scrollCtrl,
@@ -92,9 +63,7 @@ class _CategoryStripState extends State<CategoryStrip> {
               );
             },
           ),
-        ),
-      ],
-    );
+      );
   }
 }
 

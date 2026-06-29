@@ -1,98 +1,105 @@
 import 'package:flutter/material.dart';
 
+/// "Warm Ivory Luxury" — a premium light theme.
+/// Inspired by SSENSE, Hermès, Net-a-Porter, and Apple Light.
 class AppColors {
   AppColors._();
 
-  // ── Backgrounds ─────────────────────────────────────────────────────────
-  static const Color bg           = Color(0xFF080810); // near-black blue-tinted
-  static const Color surface      = Color(0xFF0F0F1C);
-  static const Color card         = Color(0xFF14142A);
-  static const Color cardElevated = Color(0xFF1C1C38);
+  // ── Backgrounds — warm ivory paper ──────────────────────────────────
+  static const Color bg           = Color(0xFFF7F5F1);
+  static const Color surface      = Color(0xFFFFFFFF);
+  static const Color card         = Color(0xFFFFFFFF);
+  static const Color cardElevated = Color(0xFFF2F0EC);
+  static const Color divider      = Color(0xFFE6E3DF);
 
-  // ── Violet / Primary ────────────────────────────────────────────────────
-  static const Color violet       = Color(0xFF7C3AED);
-  static const Color violetBright = Color(0xFF9F67FF);
-  static const Color violetDeep   = Color(0xFF5B21B6);
-  static const Color violetMuted  = Color(0xFF2D1B69);
-  static const Color violetGlow   = Color(0x557C3AED);
+  // ── Bronze Gold — primary luxury accent ─────────────────────────────
+  static const Color champagne      = Color(0xFF9A7B4F); // deep bronze (legible on white)
+  static const Color champagneDeep  = Color(0xFF7A5F38); // richer, darker
+  static const Color champagneLight = Color(0xFFC9A96E); // lighter gold
+  static const Color champagneMuted = Color(0xFFF5EFE5); // very light gold bg
 
-  // ── Neon Mint / Green ───────────────────────────────────────────────────
-  static const Color neon         = Color(0xFF00FFA3);
-  static const Color neonDim      = Color(0xFF00CC82);
-  static const Color neonMuted    = Color(0xFF003D26);
+  // ── Terracotta Rose — warm secondary ────────────────────────────────
+  static const Color rose        = Color(0xFFC47560);
+  static const Color roseDeep    = Color(0xFFA05040);
+  static const Color roseMuted   = Color(0xFFFAF0EC);
 
-  // ── Electric Blue ───────────────────────────────────────────────────────
-  static const Color blue         = Color(0xFF0EA5E9);
-  static const Color blueBright   = Color(0xFF38BDF8);
-  static const Color blueMuted    = Color(0xFF0C2A3D);
+  // ── Slate Blue — cool accent for tech ───────────────────────────────
+  static const Color ice         = Color(0xFF3D5A80);
+  static const Color iceDeep     = Color(0xFF2A3F5A);
+  static const Color iceMuted    = Color(0xFFEBF0F5);
 
-  // ── Hot Pink / Sale ─────────────────────────────────────────────────────
-  static const Color pink         = Color(0xFFFF2D6B);
-  static const Color pinkBright   = Color(0xFFFF5C8A);
-  static const Color pinkMuted    = Color(0xFF3D0D1E);
+  // ── Forest Sage — green for new/eco ─────────────────────────────────
+  static const Color sage        = Color(0xFF4E7A5A);
+  static const Color sageMuted   = Color(0xFFEBF2EE);
 
-  // ── Amber / Price ───────────────────────────────────────────────────────
-  static const Color amber        = Color(0xFFFBBF24);
-  static const Color amberDeep    = Color(0xFFD97706);
-  static const Color amberMuted   = Color(0xFF3D2A00);
+  // ── Text — warm tones ────────────────────────────────────────────────
+  static const Color textPrimary   = Color(0xFF1A1916);
+  static const Color textSecondary = Color(0xFF6B6560);
+  static const Color textMuted     = Color(0xFFB0ABA5);
+  static const Color textInverse   = Color(0xFFF7F5F1);
 
-  // ── Emerald / Success ───────────────────────────────────────────────────
-  static const Color emerald      = Color(0xFF10B981);
-  static const Color emeraldMuted = Color(0xFF0A2E22);
-
-  // ── Text ────────────────────────────────────────────────────────────────
-  static const Color textPrimary   = Color(0xFFF5F5FF);
-  static const Color textSecondary = Color(0xFF7878A0);
-  static const Color textMuted     = Color(0xFF3D3D60);
-  static const Color textInverse   = Color(0xFF080810);
-
-  // ── Glass / Border ──────────────────────────────────────────────────────
-  static const Color glass          = Color(0x14FFFFFF);
-  static const Color glassBorder    = Color(0x22FFFFFF);
+  // ── Glass / Borders ──────────────────────────────────────────────────
+  static const Color glass          = Color(0xB3FFFFFF);
+  static const Color glassBorder    = Color(0x14000000); // 8% black
   static const Color glassHighlight = Color(0x08FFFFFF);
-  static const Color glassWhite     = glass; // alias
+  static const Color glassWhite     = glass;
 
-  // ── Backwards compat aliases ────────────────────────────────────────────
-  static const Color gold      = amber;
-  static const Color goldDeep  = amberDeep;
-  static const Color goldMuted = amberMuted;
-  static const Color coral     = pink;
-  static const Color coralDeep = pink;
-  static const Color coralMuted = pinkMuted;
-  static const Color pinkDeep   = pink;     // alias
-  static const Color success   = emerald;
+  // ── Backwards-compat aliases ──────────────────────────────────────────
+  static const Color gold        = champagne;
+  static const Color goldDeep    = champagneDeep;
+  static const Color goldLight   = champagneLight;
+  static const Color goldMuted   = champagneMuted;
+  static const Color amber       = champagne;
+  static const Color amberDeep   = champagneDeep;
+  static const Color amberMuted  = champagneMuted;
+  static const Color coral       = rose;
+  static const Color coralDeep   = roseDeep;
+  static const Color coralMuted  = roseMuted;
+  static const Color pink        = rose;
+  static const Color pinkDeep    = roseDeep;
+  static const Color pinkMuted   = roseMuted;
+  static const Color violet      = champagne;
+  static const Color violetBright = champagneLight;
+  static const Color violetDeep  = champagneDeep;
+  static const Color violetMuted = champagneMuted;
+  static const Color violetGlow  = Color(0x289A7B4F);
+  static const Color neon        = sage;
+  static const Color neonDim     = Color(0xFF3A6045);
+  static const Color neonMuted   = sageMuted;
+  static const Color blue        = ice;
+  static const Color blueBright  = Color(0xFF5A80B0);
+  static const Color blueMuted   = iceMuted;
+  static const Color emerald     = sage;
+  static const Color emeraldMuted = sageMuted;
+  static const Color success     = sage;
 
-  // ── Gradients ────────────────────────────────────────────────────────────
+  // ── Gradients ─────────────────────────────────────────────────────────
   static const LinearGradient goldGradient = LinearGradient(
-    colors: [amberDeep, amber, amberDeep],
+    colors: [champagneDeep, champagne, champagneLight],
     stops: [0.0, 0.5, 1.0],
-  );
-
-  static const LinearGradient violetGradient = LinearGradient(
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-    colors: [violetDeep, violet, violetBright],
-  );
-
-  static const LinearGradient neonGradient = LinearGradient(
-    colors: [neonDim, neon],
   );
 
   static const LinearGradient heroGradient = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
-    colors: [Color(0xFF0A0A18), Color(0xFF12082E), Color(0xFF080810)],
+    colors: [Color(0xFF0A0808), Color(0xFF141010), Color(0xFF1A1614)],
   );
 
   static const LinearGradient cardGradient = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    colors: [Color(0xFF1A1A30), Color(0xFF0F0F1E)],
+    colors: [Color(0xFFFBFAF8), Color(0xFFF5F3F0)],
   );
 
   static const LinearGradient flashGradient = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    colors: [Color(0xFF1A0814), Color(0xFF2A0D1E)],
+    colors: [Color(0xFFFAF0EC), Color(0xFFF7EBE6)],
+  );
+
+  static const LinearGradient violetGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [champagneDeep, champagne],
   );
 }
