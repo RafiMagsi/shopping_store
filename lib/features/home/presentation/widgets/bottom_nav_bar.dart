@@ -50,11 +50,11 @@ class ShopBottomNavBar extends StatelessWidget {
       height: r.h(72) + MediaQuery.of(context).padding.bottom,
       padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
       decoration: BoxDecoration(
-        color: AppColors.surface.withOpacity(0.98),
+        color: AppColors.surface.withValues(alpha: 0.98),
         border: Border(top: BorderSide(color: AppColors.divider, width: 1)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 22,
             offset: const Offset(0, -6),
           ),

@@ -92,10 +92,9 @@ class _ProductCardState extends State<ProductCard>
           duration: const Duration(milliseconds: 200),
           width: w,
           clipBehavior: Clip.antiAlias,
-          // NO explicit height — let parent (Grid or ListView) constrain it
           decoration: BoxDecoration(
             color: AppColors.card,
-            borderRadius: BorderRadius.circular(r.r(28)),
+            borderRadius: BorderRadius.circular(r.r(30)),
             border: Border.all(
               color: _hovered
                   ? accent.withValues(alpha: 0.3)
@@ -105,14 +104,14 @@ class _ProductCardState extends State<ProductCard>
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withValues(alpha: _hovered ? 0.09 : 0.045),
-                blurRadius: _hovered ? 24 : 14,
-                offset: const Offset(0, 8),
+                blurRadius: _hovered ? 26 : 16,
+                offset: const Offset(0, 10),
               ),
               if (_hovered)
                 BoxShadow(
                   color: accent.withValues(alpha: 0.07),
-                  blurRadius: 28,
-                  offset: const Offset(0, 10),
+                  blurRadius: 30,
+                  offset: const Offset(0, 12),
                 ),
             ],
           ),
@@ -181,8 +180,8 @@ class _ProductImg extends StatelessWidget {
     final accent = product.accentColor;
     return ClipRRect(
       borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(r.r(28)),
-        topRight: Radius.circular(r.r(28)),
+        topLeft: Radius.circular(r.r(30)),
+        topRight: Radius.circular(r.r(30)),
       ),
       child: Stack(
         fit: StackFit.expand, // fills whatever Expanded gives it
@@ -190,17 +189,76 @@ class _ProductImg extends StatelessWidget {
           // Warm ivory photo background
           Container(color: AppColors.cardElevated),
 
+          Positioned.fill(
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(r.w(8), r.h(8), r.w(8), r.h(6)),
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: AppColors.frameSurface.withValues(alpha: 0.88),
+                  borderRadius: BorderRadius.circular(r.r(24)),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.6),
+                    width: 0.8,
+                  ),
+                ),
+              ),
+            ),
+          ),
+
+          Positioned.fill(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: RadialGradient(
+                  center: const Alignment(0, -0.2),
+                  radius: 0.95,
+                  colors: [
+                    Colors.white.withValues(alpha: 0.42),
+                    Colors.transparent,
+                  ],
+                ),
+              ),
+            ),
+          ),
+
           // Product photo — contain (shows full product on ivory bg)
           if (product.hasImage)
-            Image.network(
-              product.imageUrl,
-              fit: BoxFit.contain,
-              loadingBuilder: (context, child, prog) {
-                if (prog == null) return child;
-                return _EmojiPlaceholder(product: product, r: r);
-              },
-              errorBuilder: (context, error, stackTrace) =>
-                  _EmojiPlaceholder(product: product, r: r),
+            Padding(
+              padding: EdgeInsets.fromLTRB(r.w(9), r.h(10), r.w(9), r.h(8)),
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: AppColors.frameSurface,
+                  borderRadius: BorderRadius.circular(r.r(22)),
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Colors.white.withValues(alpha: 0.22),
+                      AppColors.frameSurface.withValues(alpha: 0.18),
+                    ],
+                  ),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(r.r(22)),
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(
+                      r.w(7),
+                      r.h(10),
+                      r.w(7),
+                      r.h(8),
+                    ),
+                    child: Image.network(
+                      product.imageUrl,
+                      fit: BoxFit.contain,
+                      loadingBuilder: (context, child, prog) {
+                        if (prog == null) return child;
+                        return _EmojiPlaceholder(product: product, r: r);
+                      },
+                      errorBuilder: (context, error, stackTrace) =>
+                          _EmojiPlaceholder(product: product, r: r),
+                    ),
+                  ),
+                ),
+              ),
             )
           else
             _EmojiPlaceholder(product: product, r: r),
@@ -274,16 +332,17 @@ class _ProductImg extends StatelessWidget {
             child: GestureDetector(
               onTap: onFavorite,
               child: Container(
-                width: r.w(32),
-                height: r.w(32),
+                width: r.w(34),
+                height: r.w(34),
                 decoration: BoxDecoration(
-                  color: AppColors.surface,
+                  color: AppColors.surface.withValues(alpha: 0.96),
                   shape: BoxShape.circle,
                   border: Border.all(color: AppColors.divider, width: 1),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withValues(alpha: 0.06),
-                      blurRadius: 8,
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
                     ),
                   ],
                 ),
@@ -326,8 +385,16 @@ class _ProductDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = product;
+    final titleStyle = AppTextStyles.h3.copyWith(
+      fontSize: r.sp(13.8),
+      color: AppColors.textPrimary,
+      height: 1.12,
+      fontWeight: FontWeight.w700,
+    );
+    final titleHeight =
+        (titleStyle.fontSize ?? 0) * (titleStyle.height ?? 1) * 2;
     return Container(
-      padding: EdgeInsets.fromLTRB(r.w(12), r.h(10), r.w(10), r.h(10)),
+      padding: EdgeInsets.fromLTRB(r.w(12), r.h(11), r.w(12), r.h(11)),
       decoration: BoxDecoration(
         color: AppColors.card,
         border: Border(top: BorderSide(color: AppColors.divider, width: 1)),
@@ -339,50 +406,75 @@ class _ProductDetails extends StatelessWidget {
           // Brand
           Text(
             p.brand.toUpperCase(),
-            style: TextStyle(
+            style: AppTextStyles.labelS.copyWith(
               color: AppColors.textMuted,
               fontSize: r.sp(9.5),
               fontWeight: FontWeight.w800,
-              letterSpacing: 1.3,
+              letterSpacing: 1.2,
             ),
           ),
-          SizedBox(height: r.h(2)),
+          SizedBox(height: r.h(4)),
 
           // Name
-          Text(
-            p.name,
-            style: AppTextStyles.h3.copyWith(
-              fontSize: r.sp(13.5),
-              color: AppColors.textPrimary,
-              height: 1.1,
+          SizedBox(
+            height: titleHeight,
+            child: Text(
+              p.name,
+              style: titleStyle,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
           ),
-          SizedBox(height: r.h(5)),
+          SizedBox(height: r.h(4)),
 
           // Rating
           Row(
             children: [
-              Icon(
-                Icons.star_rounded,
-                color: AppColors.champagne,
-                size: r.sp(12),
-              ),
-              SizedBox(width: r.w(2)),
-              Text(
-                p.rating.toStringAsFixed(1),
-                style: AppTextStyles.labelL.copyWith(
-                  color: AppColors.champagne,
-                  fontSize: r.sp(11.5),
+              Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: r.w(5),
+                  vertical: r.h(2),
+                ),
+                decoration: BoxDecoration(
+                  color: AppColors.ratingBg,
+                  borderRadius: BorderRadius.circular(r.r(999)),
+                  border: Border.all(
+                    color: AppColors.ratingText.withValues(alpha: 0.10),
+                    width: 0.8,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.ratingBg.withValues(alpha: 0.9),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.star_rounded,
+                      color: AppColors.ratingText,
+                      size: r.sp(11.5),
+                    ),
+                    SizedBox(width: r.w(2)),
+                    Text(
+                      p.rating.toStringAsFixed(1),
+                      style: AppTextStyles.labelL.copyWith(
+                        color: AppColors.ratingText,
+                        fontSize: r.sp(10.8),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              SizedBox(width: r.w(3)),
+              SizedBox(width: r.w(5)),
               Text(
-                '(${_fmt(p.reviews)})',
+                '${_fmt(p.reviews)} reviews',
                 style: AppTextStyles.bodyS.copyWith(
                   color: AppColors.textMuted,
-                  fontSize: r.sp(10.5),
+                  fontSize: r.sp(10.2),
                 ),
               ),
             ],
@@ -391,31 +483,52 @@ class _ProductDetails extends StatelessWidget {
 
           // Price row
           Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              ShaderMask(
-                shaderCallback: (b) => AppColors.goldGradient.createShader(b),
-                blendMode: BlendMode.srcIn,
-                child: Text(
-                  '\$${p.price.toInt()}',
-                  style: AppTextStyles.price.copyWith(
-                    fontSize: r.sp(16.5),
-                    color: Colors.white,
-                  ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      '\$${p.price.toInt()}',
+                      style: AppTextStyles.price.copyWith(fontSize: r.sp(17)),
+                    ),
+                    SizedBox(height: r.h(2)),
+                    if (p.hasDiscount)
+                      Row(
+                        children: [
+                          Text(
+                            '\$${p.originalPrice.toInt()}',
+                            style: AppTextStyles.bodyS.copyWith(
+                              color: AppColors.textMuted,
+                              fontSize: r.sp(10.8),
+                              decoration: TextDecoration.lineThrough,
+                            ),
+                          ),
+                          SizedBox(width: r.w(5)),
+                          Text(
+                            'Save ${p.discountPercent.toInt()}%',
+                            style: AppTextStyles.labelM.copyWith(
+                              color: AppColors.roseDeep,
+                              fontSize: r.sp(10),
+                              letterSpacing: 0.15,
+                            ),
+                          ),
+                        ],
+                      )
+                    else
+                      Text(
+                        'Premium pick',
+                        style: AppTextStyles.bodyS.copyWith(
+                          color: AppColors.textMuted,
+                          fontSize: r.sp(10.4),
+                        ),
+                      ),
+                  ],
                 ),
               ),
-              if (p.hasDiscount) ...[
-                SizedBox(width: r.w(5)),
-                Text(
-                  '\$${p.originalPrice.toInt()}',
-                  style: AppTextStyles.bodyS.copyWith(
-                    color: AppColors.textMuted,
-                    fontSize: r.sp(11),
-                    decoration: TextDecoration.lineThrough,
-                  ),
-                ),
-              ],
-              const Spacer(),
+              SizedBox(width: r.w(8)),
               _AddBtn(accent: accent, r: r, onTap: onAddToCart),
             ],
           ),
@@ -456,16 +569,24 @@ class _Badge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: r.w(7), vertical: r.h(3)),
+      padding: EdgeInsets.symmetric(horizontal: r.w(8), vertical: r.h(4)),
       decoration: BoxDecoration(
-        color: accent,
-        borderRadius: BorderRadius.circular(r.r(8)),
+        color: accent.withValues(alpha: 0.94),
+        borderRadius: BorderRadius.circular(r.r(10)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.08),
+            blurRadius: 8,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: Text(
         label,
         style: AppTextStyles.labelM.copyWith(
           color: Colors.white,
-          letterSpacing: 0.5,
+          fontSize: r.sp(10),
+          letterSpacing: 0.4,
         ),
       ),
     );
@@ -515,20 +636,20 @@ class _AddBtnState extends State<_AddBtn> with SingleTickerProviderStateMixin {
       child: ScaleTransition(
         scale: Tween(begin: 1.0, end: 0.82).animate(_c),
         child: Container(
-          width: r.w(32),
-          height: r.w(32),
+          width: r.w(36),
+          height: r.w(36),
           decoration: BoxDecoration(
             color: widget.accent,
-            borderRadius: BorderRadius.circular(r.r(11)),
+            borderRadius: BorderRadius.circular(r.r(12)),
             boxShadow: [
               BoxShadow(
                 color: widget.accent.withValues(alpha: 0.25),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
+                blurRadius: 12,
+                offset: const Offset(0, 5),
               ),
             ],
           ),
-          child: const Icon(Icons.add_rounded, color: Colors.white, size: 17),
+          child: const Icon(Icons.add_rounded, color: Colors.white, size: 18),
         ),
       ),
     );

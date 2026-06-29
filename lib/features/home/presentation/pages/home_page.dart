@@ -244,7 +244,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         delay: const Duration(milliseconds: 90),
                         fromOffset: const Offset(-0.16, 0),
                         child: Padding(
-                          padding: EdgeInsets.only(bottom: r.h(8)),
+                          padding: EdgeInsets.only(bottom: r.h(16)),
                           child: CategoryStrip(
                             categories: state.categories,
                             selectedIndex: state.selectedCategoryIndex,
@@ -274,7 +274,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     ),
                     SliverToBoxAdapter(
                       child: Padding(
-                        padding: EdgeInsets.only(bottom: r.h(28)),
+                        padding: EdgeInsets.only(bottom: r.h(24)),
                         child: _HotDealsRow(
                           products: state.hotDeals,
                           scrollNotifier: _scrollNotifier,
@@ -306,7 +306,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         delay: const Duration(milliseconds: 90),
                         fromOffset: const Offset(0, 0.14),
                         child: Padding(
-                          padding: EdgeInsets.only(bottom: r.h(28)),
+                          padding: EdgeInsets.only(bottom: r.h(24)),
                           child: FlashSaleSection(
                             items: state.flashSaleItems,
                             onAddToCart: cubit.addToCart,
@@ -338,7 +338,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         delay: const Duration(milliseconds: 95),
                         fromOffset: const Offset(-0.16, 0),
                         child: Padding(
-                          padding: EdgeInsets.only(bottom: r.h(28)),
+                          padding: EdgeInsets.only(bottom: r.h(24)),
                           child: FeaturedCollection(
                             scrollNotifier: _scrollNotifier,
                           ),
@@ -365,7 +365,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     ),
                     SliverToBoxAdapter(
                       child: Padding(
-                        padding: EdgeInsets.only(bottom: r.h(28)),
+                        padding: EdgeInsets.only(bottom: r.h(24)),
                         child: TrendingSection(
                           products: state.trending,
                           scrollNotifier: _scrollNotifier,
@@ -469,16 +469,16 @@ class _ScrollSectionReveal extends StatelessWidget {
     return ScrollReveal(
       scrollNotifier: scrollNotifier,
       delay: delay,
-      duration: const Duration(milliseconds: 820),
+      duration: const Duration(milliseconds: 760),
       fromOffset: fromOffset,
-      fromScale: 0.968,
+      fromScale: 0.978,
       fromBlur: 0,
       fromAngle: 0,
-      triggerFraction: 0.97,
-      parallaxExtent: 34,
-      parallaxScale: 0.03,
-      minVisibleOpacity: 0.34,
-      exitDriftFactor: 0.72,
+      triggerFraction: 0.95,
+      parallaxExtent: 24,
+      parallaxScale: 0.018,
+      minVisibleOpacity: 0.52,
+      exitDriftFactor: 0.48,
       useViewportOffset: true,
       child: child,
     );
@@ -505,7 +505,7 @@ class _SectionTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(r.w(20), r.h(8), r.w(20), r.h(16)),
+      padding: EdgeInsets.fromLTRB(r.w(20), r.h(12), r.w(20), r.h(14)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -558,7 +558,7 @@ class _SectionTitle extends StatelessWidget {
             title,
             style: AppTextStyles.displayL.copyWith(
               color: AppColors.textPrimary,
-              fontSize: r.sp(31),
+              fontSize: r.sp(29.5),
               height: 1.04,
             ),
           ),
@@ -623,15 +623,15 @@ class _HotDealsRowState extends State<_HotDealsRow> {
             padding: EdgeInsets.only(right: r.w(12)),
             child: ScrollReveal(
               scrollNotifier: widget.scrollNotifier,
-              delay: Duration(milliseconds: 55 * i),
-              duration: const Duration(milliseconds: 620),
-              fromOffset: Offset(i.isEven ? 18 : 24, 10),
-              fromScale: 0.97,
+              delay: Duration(milliseconds: 42 * i),
+              duration: const Duration(milliseconds: 580),
+              fromOffset: Offset(i.isEven ? 14 : 18, 8),
+              fromScale: 0.98,
               fromBlur: 0,
-              triggerFraction: 1.04,
-              parallaxExtent: 10,
-              parallaxScale: 0.018,
-              minVisibleOpacity: 0.72,
+              triggerFraction: 0.98,
+              parallaxExtent: 8,
+              parallaxScale: 0.012,
+              minVisibleOpacity: 0.8,
               child: HorizontalTilt3D(
                 scrollNotifier: _hScrollNotifier,
                 child: SizedBox(

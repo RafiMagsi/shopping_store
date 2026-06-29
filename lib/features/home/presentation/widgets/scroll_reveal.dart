@@ -27,20 +27,20 @@ class ScrollReveal extends StatefulWidget {
     required this.child,
     required this.scrollNotifier,
     this.delay = Duration.zero,
-    this.duration = const Duration(milliseconds: 760),
-    this.fromOffset = const Offset(0, 24),
-    this.fromScale = 0.972,
+    this.duration = const Duration(milliseconds: 720),
+    this.fromOffset = const Offset(0, 20),
+    this.fromScale = 0.978,
     this.fromBlur = 0.0,
     this.fromAngle = 0.0,
     this.useBlur = false,
     this.use3d = false,
     this.useViewportOffset = false,
     this.useParallax = true,
-    this.parallaxExtent = 20,
-    this.parallaxScale = 0.02,
-    this.minVisibleOpacity = 0.46,
-    this.exitDriftFactor = 0.58,
-    this.triggerFraction = 1.0,
+    this.parallaxExtent = 16,
+    this.parallaxScale = 0.014,
+    this.minVisibleOpacity = 0.58,
+    this.exitDriftFactor = 0.42,
+    this.triggerFraction = 0.96,
   });
 
   @override
@@ -112,8 +112,8 @@ class _ScrollRevealState extends State<ScrollReveal>
       _check();
       return;
     }
-    if ((oldCenter - _centerRatio).abs() > 0.008 ||
-        (oldVisibility - _visibility).abs() > 0.015) {
+    if ((oldCenter - _centerRatio).abs() > 0.006 ||
+        (oldVisibility - _visibility).abs() > 0.012) {
       setState(() {});
     }
   }

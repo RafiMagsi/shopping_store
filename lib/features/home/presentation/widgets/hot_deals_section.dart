@@ -2,7 +2,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_text_styles.dart';
 import '../../../../core/utils/responsive.dart';
 import '../../domain/entities/product.dart';
 import 'scroll_reveal.dart';
@@ -82,23 +81,34 @@ class _DealCard extends StatefulWidget {
   final R r;
   final VoidCallback onAddToCart;
 
-  const _DealCard({required this.product, required this.r, required this.onAddToCart});
+  const _DealCard({
+    required this.product,
+    required this.r,
+    required this.onAddToCart,
+  });
 
   @override
   State<_DealCard> createState() => _DealCardState();
 }
 
-class _DealCardState extends State<_DealCard> with SingleTickerProviderStateMixin {
+class _DealCardState extends State<_DealCard>
+    with SingleTickerProviderStateMixin {
   late final AnimationController _press;
 
   @override
   void initState() {
     super.initState();
-    _press = AnimationController(vsync: this, duration: const Duration(milliseconds: 100));
+    _press = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 100),
+    );
   }
 
   @override
-  void dispose() { _press.dispose(); super.dispose(); }
+  void dispose() {
+    _press.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -114,29 +124,46 @@ class _DealCardState extends State<_DealCard> with SingleTickerProviderStateMixi
         onTapCancel: () => _press.reverse(),
         child: Container(
           width: r.w(200),
+          padding: EdgeInsets.all(r.w(2)),
           decoration: BoxDecoration(
+            color: AppColors.card,
             borderRadius: BorderRadius.circular(r.r(24)),
             border: Border.all(color: AppColors.divider, width: 1),
             boxShadow: [
-              BoxShadow(color: Colors.black.withOpacity(0.5), blurRadius: 30, offset: const Offset(0, 12)),
-              BoxShadow(color: accent.withOpacity(0.18), blurRadius: 40, offset: const Offset(0, 20)),
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.16),
+                blurRadius: 22,
+                offset: const Offset(0, 10),
+              ),
+              BoxShadow(
+                color: accent.withValues(alpha: 0.08),
+                blurRadius: 24,
+                offset: const Offset(0, 14),
+              ),
             ],
           ),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(r.r(24)),
+            borderRadius: BorderRadius.circular(r.r(22)),
             child: Stack(
               children: [
                 // Full-bleed product image
                 Positioned.fill(
-                  child: p.hasImage
-                      ? Image.network(
-                          p.imageUrl,
-                          fit: BoxFit.cover,
-                          errorBuilder: (_, __, ___) => _fallback(p, r),
-                          loadingBuilder: (_, child, prog) =>
-                              prog == null ? child : _fallback(p, r),
-                        )
-                      : _fallback(p, r),
+                  child: Padding(
+                    padding: EdgeInsets.all(r.w(4)),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(r.r(18)),
+                      child: p.hasImage
+                          ? Image.network(
+                              p.imageUrl,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  _fallback(p, r),
+                              loadingBuilder: (context, child, prog) =>
+                                  prog == null ? child : _fallback(p, r),
+                            )
+                          : _fallback(p, r),
+                    ),
+                  ),
                 ),
 
                 // Dark gradient overlay
@@ -148,8 +175,8 @@ class _DealCardState extends State<_DealCard> with SingleTickerProviderStateMixi
                         end: Alignment.bottomCenter,
                         colors: [
                           Colors.transparent,
-                          Colors.black.withOpacity(0.4),
-                          Colors.black.withOpacity(0.85),
+                          Colors.black.withValues(alpha: 0.4),
+                          Colors.black.withValues(alpha: 0.85),
                         ],
                         stops: const [0.3, 0.6, 1.0],
                       ),
@@ -159,14 +186,25 @@ class _DealCardState extends State<_DealCard> with SingleTickerProviderStateMixi
 
                 // Neon glow line at top
                 Positioned(
-                  top: 0, left: 0, right: 0,
+                  top: 0,
+                  left: 0,
+                  right: 0,
                   child: Container(
                     height: 2,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
-                        colors: [Colors.transparent, accent, Colors.transparent],
+                        colors: [
+                          Colors.transparent,
+                          accent,
+                          Colors.transparent,
+                        ],
                       ),
-                      boxShadow: [BoxShadow(color: accent.withOpacity(0.8), blurRadius: 12)],
+                      boxShadow: [
+                        BoxShadow(
+                          color: accent.withValues(alpha: 0.8),
+                          blurRadius: 12,
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -174,64 +212,90 @@ class _DealCardState extends State<_DealCard> with SingleTickerProviderStateMixi
                 // Badge top-left
                 if (p.badge.isNotEmpty)
                   Positioned(
-                    top: r.h(12), left: r.w(12),
+                    top: r.h(12),
+                    left: r.w(12),
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: r.w(10), vertical: r.h(4)),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: r.w(10),
+                        vertical: r.h(4),
+                      ),
                       decoration: BoxDecoration(
                         color: accent,
                         borderRadius: BorderRadius.circular(r.r(8)),
-                        boxShadow: [BoxShadow(color: accent.withOpacity(0.5), blurRadius: 10)],
+                        boxShadow: [
+                          BoxShadow(
+                            color: accent.withValues(alpha: 0.5),
+                            blurRadius: 10,
+                          ),
+                        ],
                       ),
-                      child: Text(p.badge,
-                          style: const TextStyle(
-                              color: Colors.white, fontSize: 9.5, fontWeight: FontWeight.w800, letterSpacing: 1)),
+                      child: Text(
+                        p.badge,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 9.5,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: 1,
+                        ),
+                      ),
                     ),
                   ),
 
                 // Content at bottom
                 Positioned(
-                  bottom: 0, left: 0, right: 0,
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
                   child: Padding(
                     padding: EdgeInsets.all(r.w(14)),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(p.brand.toUpperCase(),
-                            style: TextStyle(
-                              color: accent,
-                              fontSize: r.sp(9),
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: 2,
-                            )),
+                        Text(
+                          p.brand.toUpperCase(),
+                          style: TextStyle(
+                            color: accent,
+                            fontSize: r.sp(9),
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 2,
+                          ),
+                        ),
                         SizedBox(height: r.h(2)),
-                        Text(p.name,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: -0.3,
-                            ),
-                            maxLines: 1, overflow: TextOverflow.ellipsis),
+                        Text(
+                          p.name,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: -0.3,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                         SizedBox(height: r.h(8)),
                         Row(
                           children: [
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('\$${p.price.toInt()}',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: r.sp(20),
-                                      fontWeight: FontWeight.w800,
-                                    )),
+                                Text(
+                                  '\$${p.price.toInt()}',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: r.sp(20),
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                ),
                                 if (p.hasDiscount)
-                                  Text('\$${p.originalPrice.toInt()}',
-                                      style: TextStyle(
-                                        color: Colors.white38,
-                                        fontSize: r.sp(11),
-                                        decoration: TextDecoration.lineThrough,
-                                      )),
+                                  Text(
+                                    '\$${p.originalPrice.toInt()}',
+                                    style: TextStyle(
+                                      color: Colors.white38,
+                                      fontSize: r.sp(11),
+                                      decoration: TextDecoration.lineThrough,
+                                    ),
+                                  ),
                               ],
                             ),
                             const Spacer(),
@@ -243,15 +307,26 @@ class _DealCardState extends State<_DealCard> with SingleTickerProviderStateMixi
                               },
                               child: ClipOval(
                                 child: BackdropFilter(
-                                  filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+                                  filter: ImageFilter.blur(
+                                    sigmaX: 12,
+                                    sigmaY: 12,
+                                  ),
                                   child: Container(
-                                    width: r.w(42), height: r.w(42),
+                                    width: r.w(42),
+                                    height: r.w(42),
                                     decoration: BoxDecoration(
-                                      color: accent.withOpacity(0.25),
+                                      color: accent.withValues(alpha: 0.25),
                                       shape: BoxShape.circle,
-                                      border: Border.all(color: accent.withOpacity(0.6), width: 1.5),
+                                      border: Border.all(
+                                        color: accent.withValues(alpha: 0.6),
+                                        width: 1.5,
+                                      ),
                                     ),
-                                    child: Icon(Icons.add_rounded, color: accent, size: r.sp(20)),
+                                    child: Icon(
+                                      Icons.add_rounded,
+                                      color: accent,
+                                      size: r.sp(20),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -278,6 +353,8 @@ class _DealCardState extends State<_DealCard> with SingleTickerProviderStateMixi
         colors: [p.gradientStart, p.gradientEnd],
       ),
     ),
-    child: Center(child: Text(p.emoji, style: TextStyle(fontSize: r.sp(80)))),
+    child: Center(
+      child: Text(p.emoji, style: TextStyle(fontSize: r.sp(80))),
+    ),
   );
 }

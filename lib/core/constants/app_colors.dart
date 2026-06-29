@@ -10,6 +10,7 @@ class AppColors {
   static Color get surface => _palette.surface;
   static Color get card => _palette.card;
   static Color get cardElevated => _palette.cardElevated;
+  static Color get frameSurface => _palette.frameSurface;
   static Color get divider => _palette.divider;
   static Color get champagne => _palette.champagne;
   static Color get champagneDeep => _palette.champagneDeep;
@@ -27,6 +28,9 @@ class AppColors {
   static Color get textSecondary => _palette.textSecondary;
   static Color get textMuted => _palette.textMuted;
   static Color get textInverse => _palette.textInverse;
+  static Color get price => _palette.price;
+  static Color get ratingBg => _palette.ratingBg;
+  static Color get ratingText => _palette.ratingText;
   static Color get glass => _palette.glass;
   static Color get glassBorder => _palette.glassBorder;
   static Color get glassHighlight => _palette.glassHighlight;

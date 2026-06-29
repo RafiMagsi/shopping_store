@@ -58,14 +58,14 @@ class _FlashSaleSectionState extends State<FlashSaleSection>
     return Container(
       margin: EdgeInsets.symmetric(horizontal: r.w(20)),
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(r.r(20)),
+        gradient: AppColors.flashGradient,
+        borderRadius: BorderRadius.circular(r.r(28)),
         border: Border.all(color: AppColors.divider, width: 1),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 16,
-            offset: Offset(0, 4),
+            color: Colors.black.withValues(alpha: 0.035),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
           ),
         ],
       ),
@@ -86,19 +86,20 @@ class _FlashSaleSectionState extends State<FlashSaleSection>
                   child: Container(
                     padding: EdgeInsets.all(r.w(8)),
                     decoration: BoxDecoration(
-                      color: AppColors.roseDeep,
-                      borderRadius: BorderRadius.circular(r.r(10)),
+                      color: AppColors.surface,
+                      borderRadius: BorderRadius.circular(r.r(14)),
+                      border: Border.all(color: AppColors.divider, width: 1),
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.roseDeep.withOpacity(0.5),
+                          color: Colors.black.withValues(alpha: 0.03),
                           blurRadius: 12,
-                          spreadRadius: 1,
+                          offset: const Offset(0, 4),
                         ),
                       ],
                     ),
                     child: Icon(
                       Icons.bolt_rounded,
-                      color: Colors.white,
+                      color: AppColors.rose,
                       size: r.sp(18),
                     ),
                   ),
@@ -117,8 +118,11 @@ class _FlashSaleSectionState extends State<FlashSaleSection>
                       ),
                     ),
                     Text(
-                      'Deals end in',
-                      style: AppTextStyles.bodyS.copyWith(fontSize: r.sp(11)),
+                      'Ends soon · limited stock',
+                      style: AppTextStyles.bodyS.copyWith(
+                        fontSize: r.sp(11),
+                        color: AppColors.textSecondary,
+                      ),
                     ),
                   ],
                 ),
@@ -170,8 +174,8 @@ class _FlipDigit extends StatelessWidget {
       ),
       child: Container(
         key: ValueKey(value),
-        width: r.w(34),
-        height: r.h(36),
+        width: r.w(32),
+        height: r.h(34),
         decoration: BoxDecoration(
           color: AppColors.card,
           borderRadius: BorderRadius.circular(r.r(8)),
@@ -180,7 +184,7 @@ class _FlipDigit extends StatelessWidget {
         child: Center(
           child: Text(
             value.toString().padLeft(2, '0'),
-            style: TextStyle(
+            style: AppTextStyles.h3.copyWith(
               color: AppColors.textPrimary,
               fontSize: r.sp(16),
               fontWeight: FontWeight.w800,
@@ -202,7 +206,7 @@ class _DigitSep extends StatelessWidget {
     padding: EdgeInsets.symmetric(horizontal: r.w(3)),
     child: Text(
       ':',
-      style: TextStyle(
+      style: AppTextStyles.h3.copyWith(
         color: AppColors.rose,
         fontSize: r.sp(18),
         fontWeight: FontWeight.w900,
@@ -263,23 +267,56 @@ class _FlashItemState extends State<_FlashItem>
       margin: EdgeInsets.symmetric(horizontal: r.w(12), vertical: r.h(6)),
       padding: EdgeInsets.all(r.w(12)),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.04),
-        borderRadius: BorderRadius.circular(r.r(16)),
+        color: AppColors.surface.withValues(alpha: 0.86),
+        borderRadius: BorderRadius.circular(r.r(22)),
         border: Border.all(color: AppColors.divider, width: 1),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.025),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: Row(
         children: [
           // Product image
-          ClipRRect(
-            borderRadius: BorderRadius.circular(r.r(12)),
-            child: SizedBox(
-              width: r.w(64),
-              height: r.h(64),
-              child: p.hasImage
-                  ? Image.network(
-                      p.imageUrl,
-                      fit: BoxFit.cover,
-                      errorBuilder: (_, __, ___) => Container(
+          Container(
+            width: r.w(68),
+            height: r.h(68),
+            padding: EdgeInsets.all(r.w(4)),
+            decoration: BoxDecoration(
+              color: AppColors.frameSurface,
+              borderRadius: BorderRadius.circular(r.r(18)),
+              border: Border.all(
+                color: Colors.white.withValues(alpha: 0.72),
+                width: 0.8,
+              ),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(r.r(14)),
+              child: SizedBox(
+                width: r.w(60),
+                height: r.h(60),
+                child: p.hasImage
+                    ? Image.network(
+                        p.imageUrl,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) => Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [p.gradientStart, p.gradientEnd],
+                            ),
+                          ),
+                          child: Center(
+                            child: Text(
+                              p.emoji,
+                              style: TextStyle(fontSize: r.sp(28)),
+                            ),
+                          ),
+                        ),
+                      )
+                    : Container(
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             colors: [p.gradientStart, p.gradientEnd],
@@ -292,20 +329,7 @@ class _FlashItemState extends State<_FlashItem>
                           ),
                         ),
                       ),
-                    )
-                  : Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [p.gradientStart, p.gradientEnd],
-                        ),
-                      ),
-                      child: Center(
-                        child: Text(
-                          p.emoji,
-                          style: TextStyle(fontSize: r.sp(28)),
-                        ),
-                      ),
-                    ),
+              ),
             ),
           ),
 
@@ -317,11 +341,25 @@ class _FlashItemState extends State<_FlashItem>
               children: [
                 Text(
                   p.name,
-                  style: AppTextStyles.h3.copyWith(fontSize: r.sp(13)),
+                  style: AppTextStyles.h3.copyWith(
+                    fontSize: r.sp(13.6),
+                    fontWeight: FontWeight.w700,
+                    height: 1.12,
+                  ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
-                SizedBox(height: r.h(2)),
+                SizedBox(height: r.h(1)),
+                Text(
+                  p.brand,
+                  style: AppTextStyles.bodyS.copyWith(
+                    color: AppColors.textMuted,
+                    fontSize: r.sp(10.2),
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 0.2,
+                  ),
+                ),
+                SizedBox(height: r.h(5)),
                 Row(
                   children: [
                     Text(
@@ -347,7 +385,7 @@ class _FlashItemState extends State<_FlashItem>
                       ),
                       child: Text(
                         '-${p.discountPercent.toInt()}%',
-                        style: TextStyle(
+                        style: AppTextStyles.labelM.copyWith(
                           color: Colors.white,
                           fontSize: r.sp(9),
                           fontWeight: FontWeight.w800,
@@ -368,15 +406,15 @@ class _FlashItemState extends State<_FlashItem>
                           height: r.h(4),
                           child: AnimatedBuilder(
                             animation: _bar,
-                            builder: (_, __) => LinearProgressIndicator(
-                              value: _bar.value,
-                              backgroundColor: AppColors.textMuted.withOpacity(
-                                0.3,
-                              ),
-                              valueColor: AlwaysStoppedAnimation(
-                                AppColors.rose,
-                              ),
-                            ),
+                            builder: (context, child) =>
+                                LinearProgressIndicator(
+                                  value: _bar.value,
+                                  backgroundColor: AppColors.textMuted
+                                      .withValues(alpha: 0.3),
+                                  valueColor: AlwaysStoppedAnimation(
+                                    AppColors.rose,
+                                  ),
+                                ),
                           ),
                         ),
                       ),
@@ -386,7 +424,7 @@ class _FlashItemState extends State<_FlashItem>
                       '${p.soldPercent}% sold',
                       style: AppTextStyles.bodyS.copyWith(
                         color: AppColors.rose,
-                        fontSize: r.sp(10),
+                        fontSize: r.sp(9.8),
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -410,11 +448,18 @@ class _FlashItemState extends State<_FlashItem>
                 vertical: r.h(10),
               ),
               decoration: BoxDecoration(
-                gradient: AppColors.goldGradient,
-                borderRadius: BorderRadius.circular(r.r(12)),
+                color: AppColors.rose,
+                borderRadius: BorderRadius.circular(r.r(14)),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.rose.withValues(alpha: 0.18),
+                    blurRadius: 12,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
               ),
               child: Text(
-                'Add',
+                'Buy',
                 style: AppTextStyles.labelL.copyWith(
                   color: AppColors.textInverse,
                   fontSize: r.sp(12),

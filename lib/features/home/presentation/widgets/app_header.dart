@@ -66,7 +66,9 @@ class _AppHeaderState extends State<AppHeader>
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         decoration: BoxDecoration(
-          color: AppColors.surface.withOpacity(scrolled ? opacity * 0.96 : 0),
+          color: AppColors.surface.withValues(
+            alpha: scrolled ? opacity * 0.96 : 0,
+          ),
           border: scrolled
               ? Border(
                   bottom: BorderSide(color: AppColors.divider, width: opacity),
@@ -146,25 +148,45 @@ class _HeaderContent extends StatelessWidget {
                     width: r.w(38),
                     height: r.w(38),
                     decoration: BoxDecoration(
-                      gradient: AppColors.goldGradient,
+                      color: AppColors.surface.withValues(alpha: 0.98),
                       borderRadius: BorderRadius.circular(r.r(14)),
+                      border: Border.all(
+                        color: AppColors.divider.withValues(alpha: 0.95),
+                        width: 1,
+                      ),
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.champagne.withOpacity(0.14),
-                          blurRadius: 18,
-                          offset: const Offset(0, 8),
+                          color: Colors.black.withValues(alpha: 0.035),
+                          blurRadius: 16,
+                          offset: const Offset(0, 6),
                         ),
                       ],
                     ),
-                    child: Center(
-                      child: Text(
-                        'L',
-                        style: AppTextStyles.h3.copyWith(
-                          color: AppColors.textInverse,
-                          fontWeight: FontWeight.w900,
-                          letterSpacing: -0.2,
+                    child: Stack(
+                      children: [
+                        Positioned(
+                          top: r.h(7),
+                          right: r.w(7),
+                          child: Container(
+                            width: r.w(6),
+                            height: r.w(6),
+                            decoration: BoxDecoration(
+                              color: AppColors.champagne,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
                         ),
-                      ),
+                        Center(
+                          child: Text(
+                            'L',
+                            style: AppTextStyles.h3.copyWith(
+                              color: AppColors.textPrimary,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: -0.2,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   SizedBox(width: r.w(8)),
@@ -180,16 +202,12 @@ class _HeaderContent extends StatelessWidget {
                 ],
               ),
             ),
+            SizedBox(width: r.w(12)),
 
-            const Spacer(),
-
-            // Search
-            _IconBtn(
-              icon: Icons.search_rounded,
-              onTap: onSearch ?? () {},
-              r: r,
+            Expanded(
+              child: _SearchPill(onTap: onSearch ?? () {}, r: r),
             ),
-            SizedBox(width: r.w(4)),
+            SizedBox(width: r.w(8)),
 
             // Cart with badge
             _CartBtn(
@@ -198,7 +216,7 @@ class _HeaderContent extends StatelessWidget {
               onTap: onCart ?? () {},
               r: r,
             ),
-            SizedBox(width: r.w(4)),
+            SizedBox(width: r.w(6)),
 
             // Profile
             _ProfileAvatar(r: r, onTap: onProfile ?? () {}),
@@ -209,33 +227,53 @@ class _HeaderContent extends StatelessWidget {
   }
 }
 
-class _IconBtn extends StatelessWidget {
-  final IconData icon;
+class _SearchPill extends StatelessWidget {
   final VoidCallback onTap;
   final R r;
 
-  const _IconBtn({required this.icon, required this.onTap, required this.r});
+  const _SearchPill({required this.onTap, required this.r});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: r.w(40),
+        padding: EdgeInsets.symmetric(horizontal: r.w(14)),
         height: r.w(40),
         decoration: BoxDecoration(
-          color: AppColors.surface.withOpacity(0.98),
+          color: AppColors.surface.withValues(alpha: 0.98),
           borderRadius: BorderRadius.circular(r.r(14)),
           border: Border.all(color: AppColors.divider, width: 1),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.045),
+              color: Colors.black.withValues(alpha: 0.04),
               blurRadius: 18,
               offset: const Offset(0, 6),
             ),
           ],
         ),
-        child: Icon(icon, color: AppColors.textPrimary, size: r.sp(20)),
+        child: Row(
+          children: [
+            Icon(
+              Icons.search_rounded,
+              color: AppColors.textMuted,
+              size: r.sp(18),
+            ),
+            SizedBox(width: r.w(8)),
+            Expanded(
+              child: Text(
+                'Search products',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppTextStyles.bodyM.copyWith(
+                  color: AppColors.textMuted,
+                  fontSize: r.sp(12.5),
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -268,14 +306,14 @@ class _CartBtn extends StatelessWidget {
             width: r.w(40),
             height: r.w(40),
             decoration: BoxDecoration(
-              color: AppColors.surface.withOpacity(0.98),
-              borderRadius: BorderRadius.circular(r.r(12)),
+              color: AppColors.surface.withValues(alpha: 0.98),
+              borderRadius: BorderRadius.circular(r.r(14)),
               border: Border.all(color: AppColors.divider, width: 1),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
-                  blurRadius: 14,
-                  offset: const Offset(0, 5),
+                  color: Colors.black.withValues(alpha: 0.045),
+                  blurRadius: 18,
+                  offset: const Offset(0, 6),
                 ),
               ],
             ),
@@ -335,17 +373,36 @@ class _ProfileAvatar extends StatelessWidget {
         width: r.w(40),
         height: r.w(40),
         decoration: BoxDecoration(
-          gradient: AppColors.goldGradient,
+          color: AppColors.surface.withValues(alpha: 0.98),
           shape: BoxShape.circle,
-          border: Border.all(color: AppColors.champagneDeep, width: 1.5),
+          border: Border.all(
+            color: AppColors.divider.withValues(alpha: 0.95),
+            width: 1,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.03),
+              blurRadius: 16,
+              offset: const Offset(0, 6),
+            ),
+          ],
         ),
-        child: Center(
-          child: Text(
-            'R',
-            style: TextStyle(
-              color: AppColors.textInverse,
-              fontSize: r.sp(15),
-              fontWeight: FontWeight.w800,
+        child: Padding(
+          padding: EdgeInsets.all(r.w(3)),
+          child: Container(
+            decoration: BoxDecoration(
+              color: AppColors.cardElevated,
+              shape: BoxShape.circle,
+            ),
+            child: Center(
+              child: Text(
+                'R',
+                style: TextStyle(
+                  color: AppColors.textPrimary,
+                  fontSize: r.sp(14),
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
             ),
           ),
         ),

@@ -64,14 +64,14 @@ class _ScrollTilt3DState extends State<ScrollTilt3D>
     final centerY = pos.dy + box.size.height / 2;
     final distance = ((centerY - screenH / 2) / screenH).clamp(-0.7, 0.7);
     // Map: screen top → +max, screen center → 0, screen bottom → -max
-    _targetTilt = (distance * 0.28 * widget.intensity).clamp(-0.18, 0.18);
-    _targetLift = (-distance * 28 * widget.intensity).clamp(-22.0, 22.0);
+    _targetTilt = (distance * 0.22 * widget.intensity).clamp(-0.14, 0.14);
+    _targetLift = (-distance * 18 * widget.intensity).clamp(-14.0, 14.0);
   }
 
   void _smoothUpdate() {
     if (!mounted) return;
-    final next = _currentTilt + (_targetTilt - _currentTilt) * 0.12;
-    final lift = _currentLift + (_targetLift - _currentLift) * 0.12;
+    final next = _currentTilt + (_targetTilt - _currentTilt) * 0.10;
+    final lift = _currentLift + (_targetLift - _currentLift) * 0.10;
     if ((next - _currentTilt).abs() > 0.0003 ||
         (lift - _currentLift).abs() > 0.05) {
       setState(() {
@@ -143,7 +143,7 @@ class _HorizontalTilt3DState extends State<HorizontalTilt3D>
     final screenW = MediaQuery.sizeOf(context).width;
     final pos = box.localToGlobal(Offset.zero);
     final centerX = pos.dx + box.size.width / 2;
-    _target = ((centerX - screenW / 2) / screenW * 0.22).clamp(-0.18, 0.18);
+    _target = ((centerX - screenW / 2) / screenW * 0.16).clamp(-0.12, 0.12);
   }
 
   void _smooth() {

@@ -138,18 +138,14 @@ class _BigEditorialCardState extends State<_BigEditorialCard>
     return Container(
       height: r.h(260),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [const Color(0xFFFFFBF6), const Color(0xFFF2EBE2)],
-        ),
-        borderRadius: BorderRadius.circular(r.r(20)),
+        gradient: AppColors.cardGradient,
+        borderRadius: BorderRadius.circular(r.r(22)),
         border: Border.all(color: AppColors.divider, width: 1),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.055),
-            blurRadius: 16,
-            offset: const Offset(0, 7),
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 18,
+            offset: const Offset(0, 8),
           ),
         ],
       ),
@@ -167,7 +163,7 @@ class _BigEditorialCardState extends State<_BigEditorialCard>
                 shape: BoxShape.circle,
                 gradient: RadialGradient(
                   colors: [
-                    AppColors.champagne.withOpacity(0.09),
+                    AppColors.champagne.withValues(alpha: 0.09),
                     Colors.transparent,
                   ],
                 ),
@@ -210,16 +206,16 @@ class _BigEditorialCardState extends State<_BigEditorialCard>
                     vertical: r.h(4),
                   ),
                   decoration: BoxDecoration(
-                    color: AppColors.champagne.withOpacity(0.14),
+                    color: AppColors.champagne.withValues(alpha: 0.14),
                     borderRadius: BorderRadius.circular(r.r(6)),
                     border: Border.all(
-                      color: AppColors.champagne.withOpacity(0.18),
+                      color: AppColors.champagne.withValues(alpha: 0.18),
                       width: 1,
                     ),
                   ),
                   child: Text(
-                    'NEW IN',
-                    style: TextStyle(
+                    'EDITOR’S PICK',
+                    style: AppTextStyles.labelM.copyWith(
                       color: AppColors.champagneDeep,
                       fontSize: r.sp(9),
                       fontWeight: FontWeight.w800,
@@ -232,8 +228,8 @@ class _BigEditorialCardState extends State<_BigEditorialCard>
 
                 // Title
                 Text(
-                  'Nike Air\nMax 2025',
-                  style: TextStyle(
+                  'Curated\nSneaker Edit',
+                  style: AppTextStyles.h2.copyWith(
                     color: AppColors.textPrimary,
                     fontSize: r.sp(18),
                     fontWeight: FontWeight.w900,
@@ -244,16 +240,12 @@ class _BigEditorialCardState extends State<_BigEditorialCard>
                 SizedBox(height: r.h(4)),
 
                 // Price
-                ShaderMask(
-                  shaderCallback: (b) => AppColors.goldGradient.createShader(b),
-                  blendMode: BlendMode.srcIn,
-                  child: Text(
-                    'From \$199',
-                    style: TextStyle(
-                      color: AppColors.textPrimary,
-                      fontSize: r.sp(12),
-                      fontWeight: FontWeight.w700,
-                    ),
+                Text(
+                  'From \$199 · Handpicked',
+                  style: AppTextStyles.labelL.copyWith(
+                    color: AppColors.price,
+                    fontSize: r.sp(12),
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
                 SizedBox(height: r.h(12)),
@@ -269,7 +261,7 @@ class _BigEditorialCardState extends State<_BigEditorialCard>
                     borderRadius: BorderRadius.circular(r.r(10)),
                     boxShadow: [
                       BoxShadow(
-                        color: AppColors.champagne.withOpacity(0.14),
+                        color: AppColors.champagne.withValues(alpha: 0.14),
                         blurRadius: 12,
                         offset: const Offset(0, 4),
                       ),
@@ -322,10 +314,10 @@ class _SmallCard extends StatelessWidget {
           colors: [bg, bgEnd],
         ),
         borderRadius: BorderRadius.circular(r.r(16)),
-        border: Border.all(color: accent.withOpacity(0.20), width: 1),
+        border: Border.all(color: accent.withValues(alpha: 0.20), width: 1),
         boxShadow: [
           BoxShadow(
-            color: accent.withOpacity(0.07),
+            color: accent.withValues(alpha: 0.07),
             blurRadius: 14,
             offset: const Offset(0, 4),
           ),
@@ -371,7 +363,7 @@ class _SmallCard extends StatelessWidget {
                   children: [
                     Text(
                       'Shop',
-                      style: TextStyle(
+                      style: AppTextStyles.labelM.copyWith(
                         color: accent,
                         fontSize: r.sp(10),
                         fontWeight: FontWeight.w700,
@@ -397,7 +389,7 @@ class _SmallCard extends StatelessWidget {
               padding: const EdgeInsets.all(3),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: accent.withOpacity(0.10),
+                color: accent.withValues(alpha: 0.10),
               ),
               child: Icon(
                 Icons.arrow_outward_rounded,
@@ -440,20 +432,23 @@ class _FramedProductVisual extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            Colors.white.withOpacity(compact ? 0.90 : 0.95),
-            const Color(0xFFF0E7D9).withOpacity(compact ? 0.92 : 0.96),
+            Colors.white.withValues(alpha: compact ? 0.90 : 0.95),
+            const Color(0xFFF0E7D9).withValues(alpha: compact ? 0.92 : 0.96),
           ],
         ),
-        border: Border.all(color: Colors.white.withOpacity(0.75), width: 1),
+        border: Border.all(
+          color: Colors.white.withValues(alpha: 0.75),
+          width: 1,
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(compact ? 0.10 : 0.16),
+            color: Colors.black.withValues(alpha: compact ? 0.10 : 0.16),
             blurRadius: compact ? 14 : 22,
             offset: const Offset(0, 8),
             spreadRadius: compact ? -8 : -10,
           ),
           BoxShadow(
-            color: accent.withOpacity(compact ? 0.16 : 0.22),
+            color: accent.withValues(alpha: compact ? 0.16 : 0.22),
             blurRadius: compact ? 18 : 24,
             offset: const Offset(0, 6),
             spreadRadius: compact ? -10 : -12,
@@ -467,7 +462,7 @@ class _FramedProductVisual extends StatelessWidget {
             center: const Alignment(0, -0.1),
             radius: 0.95,
             colors: [
-              accent.withOpacity(compact ? 0.12 : 0.16),
+              accent.withValues(alpha: compact ? 0.12 : 0.16),
               const Color(0xFFF6F1E8),
               const Color(0xFFE9DFD0),
             ],
@@ -479,7 +474,7 @@ class _FramedProductVisual extends StatelessWidget {
           child: Image.network(
             imageUrl,
             fit: BoxFit.contain,
-            errorBuilder: (_, __, ___) => Center(
+            errorBuilder: (context, error, stackTrace) => Center(
               child: Text(
                 emoji,
                 style: TextStyle(fontSize: r.sp(compact ? 24 : 44)),

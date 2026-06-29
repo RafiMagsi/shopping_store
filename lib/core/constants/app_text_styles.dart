@@ -99,7 +99,7 @@ class AppTextStyles {
 
   // ── Price ────────────────────────────────────────────────────────────────
   static TextStyle get price => TextStyle(
-    color: AppColors.gold,
+    color: AppColors.price,
     fontSize: 19,
     fontWeight: FontWeight.w800,
     letterSpacing: -0.4,

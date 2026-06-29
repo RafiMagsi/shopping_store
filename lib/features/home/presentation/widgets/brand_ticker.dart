@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_text_styles.dart';
 import '../../../../core/utils/responsive.dart';
 
 // Brand data: name + Clearbit logo URL
@@ -77,20 +78,20 @@ class _BrandTickerState extends State<BrandTicker>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'OUR PARTNERS',
-                style: TextStyle(
+                'TRUSTED LABELS',
+                style: AppTextStyles.labelS.copyWith(
                   color: AppColors.champagne,
-                  fontSize: r.sp(10),
+                  fontSize: r.sp(9.5),
                   fontWeight: FontWeight.w700,
-                  letterSpacing: 1.5,
+                  letterSpacing: 1.4,
                 ),
               ),
               SizedBox(height: r.h(2)),
               Text(
-                'Trusted Brands',
-                style: TextStyle(
+                'Verified Brand Partners',
+                style: AppTextStyles.h2.copyWith(
                   color: AppColors.textPrimary,
-                  fontSize: r.sp(22),
+                  fontSize: r.sp(20),
                   fontWeight: FontWeight.w800,
                   letterSpacing: -0.5,
                 ),
@@ -112,10 +113,10 @@ class _BrandTickerState extends State<BrandTicker>
           ).createShader(bounds),
           blendMode: BlendMode.dstOut,
           child: SizedBox(
-            height: r.h(72),
+            height: r.h(68),
             child: AnimatedBuilder(
               animation: _ctrl,
-              builder: (_, __) {
+              builder: (context, child) {
                 // Smooth translate: moves -_totalW over the full duration, then loops
                 final offset = -_ctrl.value * _totalW;
                 return OverflowBox(
@@ -152,15 +153,16 @@ class _BrandChip extends StatelessWidget {
     return Container(
       width: _BrandTickerState._chipWidth,
       margin: const EdgeInsets.only(right: _BrandTickerState._chipGap),
+      padding: EdgeInsets.symmetric(horizontal: r.w(12), vertical: r.h(10)),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(r.r(18)),
         border: Border.all(color: AppColors.divider, width: 1),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
+            color: Colors.black.withValues(alpha: 0.025),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
@@ -169,20 +171,28 @@ class _BrandChip extends StatelessWidget {
         children: [
           // Logo image
           ClipRRect(
-            borderRadius: BorderRadius.circular(4),
-            child: Image.network(
-              brand.logoUrl,
-              width: r.w(24),
-              height: r.w(24),
-              fit: BoxFit.contain,
-              errorBuilder: (_, __, ___) => _FallbackLogo(brand: brand, r: r),
+            borderRadius: BorderRadius.circular(r.r(8)),
+            child: Container(
+              width: r.w(30),
+              height: r.w(30),
+              padding: EdgeInsets.all(r.w(4)),
+              decoration: BoxDecoration(
+                color: AppColors.cardElevated,
+                borderRadius: BorderRadius.circular(r.r(8)),
+              ),
+              child: Image.network(
+                brand.logoUrl,
+                fit: BoxFit.contain,
+                errorBuilder: (context, error, stackTrace) =>
+                    _FallbackLogo(brand: brand, r: r),
+              ),
             ),
           ),
           SizedBox(width: r.w(8)),
           Flexible(
             child: Text(
               brand.name,
-              style: TextStyle(
+              style: AppTextStyles.labelL.copyWith(
                 color: AppColors.textSecondary,
                 fontSize: r.sp(12),
                 fontWeight: FontWeight.w600,
@@ -214,7 +224,7 @@ class _FallbackLogo extends StatelessWidget {
       child: Center(
         child: Text(
           brand.name[0],
-          style: TextStyle(
+          style: AppTextStyles.labelM.copyWith(
             color: AppColors.champagne,
             fontSize: r.sp(11),
             fontWeight: FontWeight.w800,
