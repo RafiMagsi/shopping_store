@@ -1,0 +1,49 @@
+# Flutter / Dart
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub/
+.pub-cache/
+.idea/
+/build/
+/coverage/
+
+# Generated docs and tooling output
+**/doc/api/
+app.*.symbols
+app.*.map.json
+
+# Platform build artifacts
+android/.gradle/
+android/app/debug/
+android/app/profile/
+android/app/release/
+android/local.properties
+ios/Flutter/ephemeral/
+ios/Pods/
+ios/.symlinks/
+linux/flutter/ephemeral/
+macos/Flutter/ephemeral/
+web/.dart_tool/
+windows/flutter/ephemeral/
+
+# OS and editor files
+.DS_Store
+*.iml
+*.ipr
+*.iws
+*.log
+*.swp
+*.pyc
+*.class
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# VS Code can be committed if desired, so keep it tracked by default.
+# .vscode/
