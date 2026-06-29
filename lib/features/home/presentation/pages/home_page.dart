@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_text_styles.dart';
 import '../../../../core/utils/responsive.dart';
 import '../cubit/home_cubit.dart';
 import '../cubit/home_state.dart';
@@ -525,9 +526,9 @@ class _SectionTitle extends StatelessWidget {
                 overline,
                 style: TextStyle(
                   color: accent,
-                  fontSize: r.sp(10),
+                  fontSize: r.sp(10.5),
                   fontWeight: FontWeight.w800,
-                  letterSpacing: 2.0,
+                  letterSpacing: 2.1,
                 ),
               ),
               const Spacer(),
@@ -535,9 +536,9 @@ class _SectionTitle extends StatelessWidget {
                 children: [
                   Text(
                     'See All',
-                    style: TextStyle(
+                    style: AppTextStyles.bodyM.copyWith(
                       color: AppColors.textSecondary,
-                      fontSize: r.sp(12),
+                      fontSize: r.sp(12.5),
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -555,12 +556,10 @@ class _SectionTitle extends StatelessWidget {
           // Large editorial title
           Text(
             title,
-            style: TextStyle(
+            style: AppTextStyles.displayL.copyWith(
               color: AppColors.textPrimary,
-              fontSize: r.sp(32),
-              fontWeight: FontWeight.w800,
-              letterSpacing: -1.2,
-              height: 1.05,
+              fontSize: r.sp(31),
+              height: 1.04,
             ),
           ),
         ],

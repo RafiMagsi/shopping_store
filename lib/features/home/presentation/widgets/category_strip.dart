@@ -1,31 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_text_styles.dart';
 import '../../../../core/utils/responsive.dart';
 import '../../domain/entities/category_item.dart';
 import 'scroll_reveal.dart';
 
 // ── Icon mapping — professional icon set ───────────────────────────────────
 const _iconMap = <String, IconData>{
-  'all':         Icons.apps_rounded,
+  'all': Icons.apps_rounded,
   'electronics': Icons.bolt_rounded,
-  'fashion':     Icons.checkroom_rounded,
-  'beauty':      Icons.spa_rounded,
-  'sports':      Icons.fitness_center_rounded,
-  'home':        Icons.weekend_rounded,
-  'luxury':      Icons.diamond_rounded,
+  'fashion': Icons.checkroom_rounded,
+  'beauty': Icons.spa_rounded,
+  'sports': Icons.fitness_center_rounded,
+  'home': Icons.weekend_rounded,
+  'luxury': Icons.diamond_rounded,
 };
 
 // ── Gradient pairs per category ────────────────────────────────────────────
 // Each pair: [lighter, deeper] used for the icon badge gradient
 const _gradientMap = <String, List<Color>>{
-  'all':         [Color(0xFFD4B896), Color(0xFFB89070)],
+  'all': [Color(0xFFD4B896), Color(0xFFB89070)],
   'electronics': [Color(0xFF7EC8F0), Color(0xFF3A90C8)],
-  'fashion':     [Color(0xFFF0A080), Color(0xFFD05830)],
-  'beauty':      [Color(0xFFDDA8D0), Color(0xFFB060A0)],
-  'sports':      [Color(0xFF80C8A0), Color(0xFF3A9060)],
-  'home':        [Color(0xFFD4B896), Color(0xFFB07050)],
-  'luxury':      [Color(0xFFE0C870), Color(0xFFB89030)],
+  'fashion': [Color(0xFFF0A080), Color(0xFFD05830)],
+  'beauty': [Color(0xFFDDA8D0), Color(0xFFB060A0)],
+  'sports': [Color(0xFF80C8A0), Color(0xFF3A9060)],
+  'home': [Color(0xFFD4B896), Color(0xFFB07050)],
+  'luxury': [Color(0xFFE0C870), Color(0xFFB89030)],
 };
 
 class CategoryStrip extends StatefulWidget {
@@ -64,7 +65,7 @@ class _CategoryStripState extends State<CategoryStrip> {
         controller: _scrollCtrl,
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
-        padding: EdgeInsets.symmetric(horizontal: r.w(18)),
+        padding: EdgeInsets.symmetric(horizontal: r.w(18), vertical: r.h(6)),
         itemCount: widget.categories.length,
         itemBuilder: (_, i) {
           final item = widget.categories[i];
@@ -117,9 +118,13 @@ class _CategoryChipState extends State<_CategoryChip>
   void initState() {
     super.initState();
     _press = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 85));
-    _scale = Tween(begin: 1.0, end: 0.91)
-        .animate(CurvedAnimation(parent: _press, curve: Curves.easeOut));
+      vsync: this,
+      duration: const Duration(milliseconds: 85),
+    );
+    _scale = Tween(
+      begin: 1.0,
+      end: 0.91,
+    ).animate(CurvedAnimation(parent: _press, curve: Curves.easeOut));
   }
 
   @override
@@ -153,10 +158,12 @@ class _CategoryChipState extends State<_CategoryChip>
             duration: const Duration(milliseconds: 240),
             curve: Curves.easeOutCubic,
             padding: EdgeInsets.symmetric(
-                horizontal: r.w(13), vertical: r.h(7)),
+              horizontal: r.w(10),
+              vertical: r.h(5),
+            ),
             decoration: BoxDecoration(
-              color: selected ? deepColor.withOpacity(0.08) : AppColors.surface,
-              borderRadius: BorderRadius.circular(r.r(26)),
+              color: selected ? deepColor.withOpacity(0.09) : AppColors.surface,
+              borderRadius: BorderRadius.circular(r.r(18)),
               border: Border.all(
                 color: selected
                     ? deepColor.withOpacity(0.35)
@@ -167,16 +174,16 @@ class _CategoryChipState extends State<_CategoryChip>
                   ? [
                       BoxShadow(
                         color: deepColor.withOpacity(0.20),
-                        blurRadius: 16,
-                        offset: const Offset(0, 4),
+                        blurRadius: 18,
+                        offset: const Offset(0, 6),
                         spreadRadius: -2,
                       ),
                     ]
                   : [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.04),
-                        blurRadius: 6,
-                        offset: const Offset(0, 2),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
                       ),
                     ],
             ),
@@ -195,11 +202,9 @@ class _CategoryChipState extends State<_CategoryChip>
                 // ── Label ────────────────────────────────────────────
                 AnimatedDefaultTextStyle(
                   duration: const Duration(milliseconds: 220),
-                  style: TextStyle(
+                  style: AppTextStyles.labelL.copyWith(
                     color: selected ? deepColor : AppColors.textSecondary,
-                    fontSize: r.sp(12),
-                    fontWeight:
-                        selected ? FontWeight.w700 : FontWeight.w500,
+                    fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
                     letterSpacing: selected ? 0.1 : 0.0,
                   ),
                   child: Text(item.label),
@@ -231,7 +236,7 @@ class _IconBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = r.w(26);
+    final size = r.w(28);
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 240),
@@ -249,7 +254,7 @@ class _IconBadge extends StatelessWidget {
                   gradientBottom.withOpacity(0.22),
                 ],
         ),
-        borderRadius: BorderRadius.circular(r.r(8)),
+        borderRadius: BorderRadius.circular(r.r(10)),
         border: Border.all(
           color: isSelected
               ? gradientTop.withOpacity(0.5)
@@ -271,9 +276,7 @@ class _IconBadge extends StatelessWidget {
         child: Icon(
           icon,
           size: r.sp(14),
-          color: isSelected
-              ? Colors.white
-              : gradientBottom.withOpacity(0.85),
+          color: isSelected ? Colors.white : gradientBottom.withOpacity(0.85),
         ),
       ),
     );

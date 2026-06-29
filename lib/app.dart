@@ -15,7 +15,7 @@ class ShoppingStoreApp extends StatelessWidget {
       child: MaterialApp(
         title: 'LUXE',
         debugShowCheckedModeBanner: false,
-        theme: AppTheme.dark,
+        theme: AppTheme.active,
         home: const HomePage(),
       ),
     );

@@ -5,107 +5,107 @@ class AppTextStyles {
   AppTextStyles._();
 
   // ── Display ───────────────────────────────────────────────────────────────
-  static const TextStyle displayXL = TextStyle(
+  static TextStyle get displayXL => TextStyle(
     color: AppColors.textPrimary,
-    fontSize: 52,
-    fontWeight: FontWeight.w800,
-    letterSpacing: -2.5,
-    height: 1.05,
+    fontSize: 50,
+    fontWeight: FontWeight.w900,
+    letterSpacing: -2.2,
+    height: 1.02,
   );
 
-  static const TextStyle displayL = TextStyle(
+  static TextStyle get displayL => TextStyle(
     color: AppColors.textPrimary,
-    fontSize: 40,
+    fontSize: 38,
     fontWeight: FontWeight.w800,
-    letterSpacing: -2.0,
-    height: 1.1,
+    letterSpacing: -1.8,
+    height: 1.06,
   );
 
-  static const TextStyle displayM = TextStyle(
+  static TextStyle get displayM => TextStyle(
     color: AppColors.textPrimary,
-    fontSize: 32,
-    fontWeight: FontWeight.w700,
-    letterSpacing: -1.5,
-    height: 1.15,
+    fontSize: 31,
+    fontWeight: FontWeight.w800,
+    letterSpacing: -1.3,
+    height: 1.08,
   );
 
   // ── Headings ──────────────────────────────────────────────────────────────
-  static const TextStyle h1 = TextStyle(
+  static TextStyle get h1 => TextStyle(
     color: AppColors.textPrimary,
-    fontSize: 26,
-    fontWeight: FontWeight.w700,
-    letterSpacing: -0.8,
+    fontSize: 27,
+    fontWeight: FontWeight.w800,
+    letterSpacing: -0.9,
+    height: 1.12,
+  );
+
+  static TextStyle get h2 => TextStyle(
+    color: AppColors.textPrimary,
+    fontSize: 21,
+    fontWeight: FontWeight.w600,
+    letterSpacing: -0.5,
     height: 1.2,
   );
 
-  static const TextStyle h2 = TextStyle(
+  static TextStyle get h3 => TextStyle(
     color: AppColors.textPrimary,
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: FontWeight.w600,
-    letterSpacing: -0.4,
-    height: 1.3,
-  );
-
-  static const TextStyle h3 = TextStyle(
-    color: AppColors.textPrimary,
-    fontSize: 17,
-    fontWeight: FontWeight.w600,
-    letterSpacing: -0.2,
+    letterSpacing: -0.25,
   );
 
   // ── Body ──────────────────────────────────────────────────────────────────
-  static const TextStyle bodyL = TextStyle(
+  static TextStyle get bodyL => TextStyle(
     color: AppColors.textSecondary,
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: FontWeight.w400,
-    height: 1.6,
+    height: 1.55,
   );
 
-  static const TextStyle bodyM = TextStyle(
+  static TextStyle get bodyM => TextStyle(
     color: AppColors.textSecondary,
-    fontSize: 14,
+    fontSize: 14.5,
     fontWeight: FontWeight.w400,
-    height: 1.5,
+    height: 1.48,
   );
 
-  static const TextStyle bodyS = TextStyle(
+  static TextStyle get bodyS => TextStyle(
     color: AppColors.textSecondary,
-    fontSize: 12,
+    fontSize: 12.5,
     fontWeight: FontWeight.w400,
     height: 1.4,
   );
 
   // ── Labels ────────────────────────────────────────────────────────────────
-  static const TextStyle labelL = TextStyle(
+  static TextStyle get labelL => TextStyle(
     color: AppColors.textPrimary,
-    fontSize: 13,
-    fontWeight: FontWeight.w600,
-    letterSpacing: 0.3,
+    fontSize: 13.5,
+    fontWeight: FontWeight.w700,
+    letterSpacing: 0.2,
   );
 
-  static const TextStyle labelM = TextStyle(
+  static TextStyle get labelM => TextStyle(
     color: AppColors.textPrimary,
-    fontSize: 11,
-    fontWeight: FontWeight.w600,
-    letterSpacing: 0.5,
+    fontSize: 11.5,
+    fontWeight: FontWeight.w700,
+    letterSpacing: 0.45,
   );
 
-  static const TextStyle labelS = TextStyle(
+  static TextStyle get labelS => TextStyle(
     color: AppColors.textSecondary,
-    fontSize: 10,
+    fontSize: 10.5,
     fontWeight: FontWeight.w500,
-    letterSpacing: 0.8,
+    letterSpacing: 1.0,
   );
 
   // ── Price ────────────────────────────────────────────────────────────────
-  static const TextStyle price = TextStyle(
+  static TextStyle get price => TextStyle(
     color: AppColors.gold,
-    fontSize: 18,
-    fontWeight: FontWeight.w700,
-    letterSpacing: -0.5,
+    fontSize: 19,
+    fontWeight: FontWeight.w800,
+    letterSpacing: -0.4,
   );
 
-  static const TextStyle priceStrike = TextStyle(
+  static TextStyle get priceStrike => TextStyle(
     color: AppColors.textMuted,
     fontSize: 13,
     fontWeight: FontWeight.w400,
@@ -113,16 +113,16 @@ class AppTextStyles {
   );
 
   // ── Special ──────────────────────────────────────────────────────────────
-  static const TextStyle overline = TextStyle(
+  static TextStyle get overline => TextStyle(
     color: AppColors.gold,
-    fontSize: 11,
-    fontWeight: FontWeight.w700,
-    letterSpacing: 2.5,
+    fontSize: 11.5,
+    fontWeight: FontWeight.w800,
+    letterSpacing: 2.2,
   );
 
-  static const TextStyle buttonL = TextStyle(
-    fontSize: 15,
-    fontWeight: FontWeight.w700,
-    letterSpacing: 0.5,
+  static TextStyle get buttonL => const TextStyle(
+    fontSize: 15.5,
+    fontWeight: FontWeight.w800,
+    letterSpacing: 0.3,
   );
 }

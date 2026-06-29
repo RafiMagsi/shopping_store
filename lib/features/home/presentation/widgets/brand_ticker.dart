@@ -10,18 +10,19 @@ class _Brand {
 }
 
 const _brands = [
-  _Brand('Gucci',        'https://logo.clearbit.com/gucci.com'),
-  _Brand('Rolex',        'https://logo.clearbit.com/rolex.com'),
-  _Brand('Prada',        'https://logo.clearbit.com/prada.com'),
-  _Brand('Hermès',       'https://logo.clearbit.com/hermes.com'),
-  _Brand('Louis Vuitton','https://logo.clearbit.com/louisvuitton.com'),
-  _Brand('Chanel',       'https://logo.clearbit.com/chanel.com'),
-  _Brand('Dior',         'https://logo.clearbit.com/dior.com'),
-  _Brand('Versace',      'https://logo.clearbit.com/versace.com'),
+  _Brand('Gucci', 'https://logo.clearbit.com/gucci.com'),
+  _Brand('Rolex', 'https://logo.clearbit.com/rolex.com'),
+  _Brand('Prada', 'https://logo.clearbit.com/prada.com'),
+  _Brand('Hermès', 'https://logo.clearbit.com/hermes.com'),
+  _Brand('Louis Vuitton', 'https://logo.clearbit.com/louisvuitton.com'),
+  _Brand('Chanel', 'https://logo.clearbit.com/chanel.com'),
+  _Brand('Dior', 'https://logo.clearbit.com/dior.com'),
+  _Brand('Versace', 'https://logo.clearbit.com/versace.com'),
 ];
 
 class BrandTicker extends StatefulWidget {
-  final List<String> brands;          // kept for API compat; ignored — uses _brands above
+  final List<String>
+  brands; // kept for API compat; ignored — uses _brands above
   final ValueNotifier<double> scrollNotifier;
 
   const BrandTicker({
@@ -40,11 +41,11 @@ class _BrandTickerState extends State<BrandTicker>
 
   // Width of one full set of brand chips (calculated after first frame)
   // We use a fixed chip width so we can compute the loop point ahead of time.
-  static const double _chipWidth = 140.0;   // px per chip (name + padding)
-  static const double _chipGap   = 16.0;
+  static const double _chipWidth = 140.0; // px per chip (name + padding)
+  static const double _chipGap = 16.0;
   static const double _tileWidth = _chipWidth + _chipGap;
-  static const int    _count     = 8;   // must match _brands.length
-  static const double _totalW    = _tileWidth * _count;
+  static const int _count = 8; // must match _brands.length
+  static const double _totalW = _tileWidth * _count;
 
   // Duration so full loop takes ~18 s regardless of count
   static const Duration _loopDuration = Duration(seconds: 18);
@@ -67,76 +68,76 @@ class _BrandTickerState extends State<BrandTicker>
 
     // Section-level animation handled by page-entrance system in home_page.dart
     return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Section label
-          Padding(
-            padding: EdgeInsets.fromLTRB(r.w(20), 0, r.w(20), r.h(20)),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'OUR PARTNERS',
-                  style: TextStyle(
-                    color: AppColors.champagne,
-                    fontSize: r.sp(10),
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 1.5,
-                  ),
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Section label
+        Padding(
+          padding: EdgeInsets.fromLTRB(r.w(20), 0, r.w(20), r.h(20)),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'OUR PARTNERS',
+                style: TextStyle(
+                  color: AppColors.champagne,
+                  fontSize: r.sp(10),
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 1.5,
                 ),
-                SizedBox(height: r.h(2)),
-                Text(
-                  'Trusted Brands',
-                  style: TextStyle(
-                    color: AppColors.textPrimary,
-                    fontSize: r.sp(22),
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: -0.5,
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          // Smooth ticker — fades at edges
-          ShaderMask(
-            shaderCallback: (bounds) => const LinearGradient(
-              colors: [
-                AppColors.bg,
-                Colors.transparent,
-                Colors.transparent,
-                AppColors.bg,
-              ],
-              stops: [0.0, 0.08, 0.92, 1.0],
-            ).createShader(bounds),
-            blendMode: BlendMode.dstOut,
-            child: SizedBox(
-              height: r.h(72),
-              child: AnimatedBuilder(
-                animation: _ctrl,
-                builder: (_, __) {
-                  // Smooth translate: moves -_totalW over the full duration, then loops
-                  final offset = -_ctrl.value * _totalW;
-                  return OverflowBox(
-                    alignment: Alignment.centerLeft,
-                    maxWidth: double.infinity,
-                    child: Transform.translate(
-                      offset: Offset(offset, 0),
-                      child: Row(
-                        children: [
-                          // Triple the brands so seam is always off-screen
-                          for (int rep = 0; rep < 3; rep++)
-                            for (final brand in _brands)
-                              _BrandChip(brand: brand, r: r),
-                        ],
-                      ),
-                    ),
-                  );
-                },
               ),
+              SizedBox(height: r.h(2)),
+              Text(
+                'Trusted Brands',
+                style: TextStyle(
+                  color: AppColors.textPrimary,
+                  fontSize: r.sp(22),
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: -0.5,
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        // Smooth ticker — fades at edges
+        ShaderMask(
+          shaderCallback: (bounds) => LinearGradient(
+            colors: [
+              AppColors.bg,
+              Colors.transparent,
+              Colors.transparent,
+              AppColors.bg,
+            ],
+            stops: [0.0, 0.08, 0.92, 1.0],
+          ).createShader(bounds),
+          blendMode: BlendMode.dstOut,
+          child: SizedBox(
+            height: r.h(72),
+            child: AnimatedBuilder(
+              animation: _ctrl,
+              builder: (_, __) {
+                // Smooth translate: moves -_totalW over the full duration, then loops
+                final offset = -_ctrl.value * _totalW;
+                return OverflowBox(
+                  alignment: Alignment.centerLeft,
+                  maxWidth: double.infinity,
+                  child: Transform.translate(
+                    offset: Offset(offset, 0),
+                    child: Row(
+                      children: [
+                        // Triple the brands so seam is always off-screen
+                        for (int rep = 0; rep < 3; rep++)
+                          for (final brand in _brands)
+                            _BrandChip(brand: brand, r: r),
+                      ],
+                    ),
+                  ),
+                );
+              },
             ),
           ),
-        ],
+        ),
+      ],
     );
   }
 }

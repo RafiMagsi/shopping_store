@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_text_styles.dart';
 import '../../../../core/utils/responsive.dart';
 
 class ShopBottomNavBar extends StatelessWidget {
@@ -53,9 +54,9 @@ class ShopBottomNavBar extends StatelessWidget {
         border: Border(top: BorderSide(color: AppColors.divider, width: 1)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.06),
-            blurRadius: 18,
-            offset: const Offset(0, -4),
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 22,
+            offset: const Offset(0, -6),
           ),
         ],
       ),
@@ -127,7 +128,7 @@ class _NavTile extends StatelessWidget {
                 color: isSelected
                     ? AppColors.champagneMuted
                     : Colors.transparent,
-                borderRadius: BorderRadius.circular(r.r(10)),
+                borderRadius: BorderRadius.circular(r.r(14)),
               ),
               child: Center(
                 child: AnimatedSwitcher(
@@ -146,9 +147,8 @@ class _NavTile extends StatelessWidget {
             SizedBox(height: r.h(3)),
             AnimatedDefaultTextStyle(
               duration: const Duration(milliseconds: 200),
-              style: TextStyle(
+              style: AppTextStyles.labelM.copyWith(
                 color: isSelected ? AppColors.champagne : AppColors.textMuted,
-                fontSize: r.sp(10),
                 fontWeight: isSelected ? FontWeight.w700 : FontWeight.w400,
                 letterSpacing: 0.2,
               ),

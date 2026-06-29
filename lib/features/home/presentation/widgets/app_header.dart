@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_text_styles.dart';
 import '../../../../core/utils/responsive.dart';
 
 class AppHeader extends StatefulWidget {
@@ -65,7 +66,7 @@ class _AppHeaderState extends State<AppHeader>
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         decoration: BoxDecoration(
-          color: AppColors.surface.withOpacity(scrolled ? opacity * 0.94 : 0),
+          color: AppColors.surface.withOpacity(scrolled ? opacity * 0.96 : 0),
           border: scrolled
               ? Border(
                   bottom: BorderSide(color: AppColors.divider, width: opacity),
@@ -146,21 +147,20 @@ class _HeaderContent extends StatelessWidget {
                     height: r.w(38),
                     decoration: BoxDecoration(
                       gradient: AppColors.goldGradient,
-                      borderRadius: BorderRadius.circular(r.r(12)),
+                      borderRadius: BorderRadius.circular(r.r(14)),
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.champagne.withOpacity(0.16),
-                          blurRadius: 14,
-                          offset: const Offset(0, 6),
+                          color: AppColors.champagne.withOpacity(0.14),
+                          blurRadius: 18,
+                          offset: const Offset(0, 8),
                         ),
                       ],
                     ),
                     child: Center(
                       child: Text(
                         'L',
-                        style: TextStyle(
+                        style: AppTextStyles.h3.copyWith(
                           color: AppColors.textInverse,
-                          fontSize: r.sp(15),
                           fontWeight: FontWeight.w900,
                           letterSpacing: -0.2,
                         ),
@@ -170,10 +170,10 @@ class _HeaderContent extends StatelessWidget {
                   SizedBox(width: r.w(8)),
                   Text(
                     'LUXE',
-                    style: TextStyle(
+                    style: AppTextStyles.h1.copyWith(
                       color: AppColors.textPrimary,
-                      fontSize: r.sp(18),
-                      fontWeight: FontWeight.w800,
+                      fontSize: r.sp(17.5),
+                      fontWeight: FontWeight.w900,
                       letterSpacing: 2.6,
                     ),
                   ),
@@ -225,13 +225,13 @@ class _IconBtn extends StatelessWidget {
         height: r.w(40),
         decoration: BoxDecoration(
           color: AppColors.surface.withOpacity(0.98),
-          borderRadius: BorderRadius.circular(r.r(12)),
+          borderRadius: BorderRadius.circular(r.r(14)),
           border: Border.all(color: AppColors.divider, width: 1),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 14,
-              offset: const Offset(0, 5),
+              color: Colors.black.withOpacity(0.045),
+              blurRadius: 18,
+              offset: const Offset(0, 6),
             ),
           ],
         ),
@@ -298,7 +298,7 @@ class _CartBtn extends StatelessWidget {
                 child: Container(
                   width: r.w(18),
                   height: r.w(18),
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     color: AppColors.coral,
                     shape: BoxShape.circle,
                   ),

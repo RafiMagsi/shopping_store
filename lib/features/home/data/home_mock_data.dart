@@ -18,10 +18,6 @@ class _Img {
       'https://images.unsplash.com/photo-1541643600914-78b084683702?w=600&h=600&fit=crop&q=80';
   static const camera =
       'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=600&h=600&fit=crop&q=80';
-  static const dress =
-      'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=600&h=600&fit=crop&q=80';
-  static const sunglasses =
-      'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=600&h=600&fit=crop&q=80';
   static const ring =
       'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=600&h=600&fit=crop&q=80';
   static const speaker =
@@ -121,8 +117,8 @@ class HomeMockData {
   List<Product> get hotDeals => const [
     Product(
       id: 'p1',
-      name: 'AirPods Pro Max',
-      brand: 'Apple',
+      name: 'QuietComfort Headphones',
+      brand: 'Bose',
       price: 449,
       originalPrice: 599,
       rating: 4.9,
@@ -139,7 +135,7 @@ class HomeMockData {
     Product(
       id: 'p2',
       name: 'Ultra Boost 22',
-      brand: 'Adidas',
+      brand: 'Nike',
       price: 159,
       originalPrice: 220,
       rating: 4.7,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_text_styles.dart';
 import '../../../../core/utils/responsive.dart';
 import '../../domain/entities/product.dart';
 import 'scroll_tilt.dart';
@@ -90,25 +91,28 @@ class _ProductCardState extends State<ProductCard>
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           width: w,
+          clipBehavior: Clip.antiAlias,
           // NO explicit height — let parent (Grid or ListView) constrain it
           decoration: BoxDecoration(
             color: AppColors.card,
-            borderRadius: BorderRadius.circular(r.r(20)),
+            borderRadius: BorderRadius.circular(r.r(28)),
             border: Border.all(
-              color: _hovered ? accent.withOpacity(0.3) : AppColors.divider,
+              color: _hovered
+                  ? accent.withValues(alpha: 0.3)
+                  : AppColors.divider,
               width: 1,
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(_hovered ? 0.10 : 0.05),
-                blurRadius: _hovered ? 20 : 10,
-                offset: const Offset(0, 4),
+                color: Colors.black.withValues(alpha: _hovered ? 0.09 : 0.045),
+                blurRadius: _hovered ? 24 : 14,
+                offset: const Offset(0, 8),
               ),
               if (_hovered)
                 BoxShadow(
-                  color: accent.withOpacity(0.08),
-                  blurRadius: 24,
-                  offset: const Offset(0, 8),
+                  color: accent.withValues(alpha: 0.07),
+                  blurRadius: 28,
+                  offset: const Offset(0, 10),
                 ),
             ],
           ),
@@ -177,8 +181,8 @@ class _ProductImg extends StatelessWidget {
     final accent = product.accentColor;
     return ClipRRect(
       borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(r.r(20)),
-        topRight: Radius.circular(r.r(20)),
+        topLeft: Radius.circular(r.r(28)),
+        topRight: Radius.circular(r.r(28)),
       ),
       child: Stack(
         fit: StackFit.expand, // fills whatever Expanded gives it
@@ -191,11 +195,11 @@ class _ProductImg extends StatelessWidget {
             Image.network(
               product.imageUrl,
               fit: BoxFit.contain,
-              loadingBuilder: (_, child, prog) {
+              loadingBuilder: (context, child, prog) {
                 if (prog == null) return child;
                 return _EmojiPlaceholder(product: product, r: r);
               },
-              errorBuilder: (_, __, ___) =>
+              errorBuilder: (context, error, stackTrace) =>
                   _EmojiPlaceholder(product: product, r: r),
             )
           else
@@ -212,7 +216,7 @@ class _ProductImg extends StatelessWidget {
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [accent.withOpacity(0.06), Colors.transparent],
+                  colors: [accent.withValues(alpha: 0.06), Colors.transparent],
                 ),
               ),
             ),
@@ -233,19 +237,31 @@ class _ProductImg extends StatelessWidget {
               left: r.w(10),
               child: Container(
                 padding: EdgeInsets.symmetric(
-                  horizontal: r.w(6),
-                  vertical: r.h(3),
+                  horizontal: r.w(8),
+                  vertical: r.h(4),
                 ),
                 decoration: BoxDecoration(
-                  color: AppColors.rose,
-                  borderRadius: BorderRadius.circular(r.r(6)),
+                  color: AppColors.textPrimary.withValues(alpha: 0.82),
+                  borderRadius: BorderRadius.circular(r.r(10)),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.22),
+                    width: 0.8,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.14),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
                 ),
                 child: Text(
                   '-${product.discountPercent.toInt()}%',
-                  style: const TextStyle(
+                  style: AppTextStyles.labelM.copyWith(
                     color: Colors.white,
-                    fontSize: 9,
+                    fontSize: r.sp(10),
                     fontWeight: FontWeight.w800,
+                    letterSpacing: 0.2,
                   ),
                 ),
               ),
@@ -266,7 +282,7 @@ class _ProductImg extends StatelessWidget {
                   border: Border.all(color: AppColors.divider, width: 1),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.06),
+                      color: Colors.black.withValues(alpha: 0.06),
                       blurRadius: 8,
                     ),
                   ],
@@ -325,9 +341,9 @@ class _ProductDetails extends StatelessWidget {
             p.brand.toUpperCase(),
             style: TextStyle(
               color: AppColors.textMuted,
-              fontSize: r.sp(9),
-              fontWeight: FontWeight.w700,
-              letterSpacing: 1.2,
+              fontSize: r.sp(9.5),
+              fontWeight: FontWeight.w800,
+              letterSpacing: 1.3,
             ),
           ),
           SizedBox(height: r.h(2)),
@@ -335,11 +351,10 @@ class _ProductDetails extends StatelessWidget {
           // Name
           Text(
             p.name,
-            style: TextStyle(
+            style: AppTextStyles.h3.copyWith(
+              fontSize: r.sp(13.5),
               color: AppColors.textPrimary,
-              fontSize: r.sp(13),
-              fontWeight: FontWeight.w600,
-              letterSpacing: -0.2,
+              height: 1.1,
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -357,18 +372,17 @@ class _ProductDetails extends StatelessWidget {
               SizedBox(width: r.w(2)),
               Text(
                 p.rating.toStringAsFixed(1),
-                style: TextStyle(
+                style: AppTextStyles.labelL.copyWith(
                   color: AppColors.champagne,
-                  fontSize: r.sp(11),
-                  fontWeight: FontWeight.w700,
+                  fontSize: r.sp(11.5),
                 ),
               ),
               SizedBox(width: r.w(3)),
               Text(
                 '(${_fmt(p.reviews)})',
-                style: TextStyle(
+                style: AppTextStyles.bodyS.copyWith(
                   color: AppColors.textMuted,
-                  fontSize: r.sp(10),
+                  fontSize: r.sp(10.5),
                 ),
               ),
             ],
@@ -384,9 +398,8 @@ class _ProductDetails extends StatelessWidget {
                 blendMode: BlendMode.srcIn,
                 child: Text(
                   '\$${p.price.toInt()}',
-                  style: TextStyle(
-                    fontSize: r.sp(16),
-                    fontWeight: FontWeight.w800,
+                  style: AppTextStyles.price.copyWith(
+                    fontSize: r.sp(16.5),
                     color: Colors.white,
                   ),
                 ),
@@ -395,7 +408,7 @@ class _ProductDetails extends StatelessWidget {
                 SizedBox(width: r.w(5)),
                 Text(
                   '\$${p.originalPrice.toInt()}',
-                  style: TextStyle(
+                  style: AppTextStyles.bodyS.copyWith(
                     color: AppColors.textMuted,
                     fontSize: r.sp(11),
                     decoration: TextDecoration.lineThrough,
@@ -446,14 +459,12 @@ class _Badge extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: r.w(7), vertical: r.h(3)),
       decoration: BoxDecoration(
         color: accent,
-        borderRadius: BorderRadius.circular(r.r(6)),
+        borderRadius: BorderRadius.circular(r.r(8)),
       ),
       child: Text(
         label,
-        style: const TextStyle(
+        style: AppTextStyles.labelM.copyWith(
           color: Colors.white,
-          fontSize: 9,
-          fontWeight: FontWeight.w800,
           letterSpacing: 0.5,
         ),
       ),
@@ -508,12 +519,12 @@ class _AddBtnState extends State<_AddBtn> with SingleTickerProviderStateMixin {
           height: r.w(32),
           decoration: BoxDecoration(
             color: widget.accent,
-            borderRadius: BorderRadius.circular(r.r(9)),
+            borderRadius: BorderRadius.circular(r.r(11)),
             boxShadow: [
               BoxShadow(
-                color: widget.accent.withOpacity(0.25),
-                blurRadius: 8,
-                offset: const Offset(0, 3),
+                color: widget.accent.withValues(alpha: 0.25),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
               ),
             ],
           ),

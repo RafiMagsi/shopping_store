@@ -141,26 +141,6 @@ class _HeroBannerState extends State<HeroBanner> with TickerProviderStateMixin {
                 }),
               ),
             ),
-
-            // Fade into page background
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                height: r.h(76),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.transparent,
-                      AppColors.bg.withOpacity(0.96),
-                    ],
-                  ),
-                ),
-              ),
-            ),
           ],
         ),
       ),
