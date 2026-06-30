@@ -17,6 +17,7 @@ import '../widgets/scroll_tilt.dart';
 import '../widgets/scroll_reveal.dart';
 import '../widgets/section_snap_scroll_physics.dart';
 import '../widgets/product_card.dart';
+import '../widgets/sparkle_layer.dart';
 import '../../domain/entities/product.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -172,6 +173,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         if (state.status == HomeStatus.loaded) _triggerEntrance();
         if (state.status == HomeStatus.loaded) _scheduleSectionMeasurement();
         final snapInset = r.h(82);
+        final compactSectionGap = r.h(18);
+        final sectionGap = r.h(28);
 
         return Scaffold(
           backgroundColor: AppColors.bg,
@@ -244,7 +247,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         delay: const Duration(milliseconds: 90),
                         fromOffset: const Offset(-0.16, 0),
                         child: Padding(
-                          padding: EdgeInsets.only(bottom: r.h(16)),
+                          padding: EdgeInsets.only(bottom: compactSectionGap),
                           child: CategoryStrip(
                             categories: state.categories,
                             selectedIndex: state.selectedCategoryIndex,
@@ -274,7 +277,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     ),
                     SliverToBoxAdapter(
                       child: Padding(
-                        padding: EdgeInsets.only(bottom: r.h(24)),
+                        padding: EdgeInsets.only(bottom: sectionGap),
                         child: _HotDealsRow(
                           products: state.hotDeals,
                           scrollNotifier: _scrollNotifier,
@@ -306,7 +309,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         delay: const Duration(milliseconds: 90),
                         fromOffset: const Offset(0, 0.14),
                         child: Padding(
-                          padding: EdgeInsets.only(bottom: r.h(24)),
+                          padding: EdgeInsets.only(bottom: sectionGap),
                           child: FlashSaleSection(
                             items: state.flashSaleItems,
                             onAddToCart: cubit.addToCart,
@@ -338,7 +341,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         delay: const Duration(milliseconds: 95),
                         fromOffset: const Offset(-0.16, 0),
                         child: Padding(
-                          padding: EdgeInsets.only(bottom: r.h(24)),
+                          padding: EdgeInsets.only(bottom: sectionGap),
                           child: FeaturedCollection(
                             scrollNotifier: _scrollNotifier,
                           ),
@@ -365,7 +368,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     ),
                     SliverToBoxAdapter(
                       child: Padding(
-                        padding: EdgeInsets.only(bottom: r.h(24)),
+                        padding: EdgeInsets.only(bottom: sectionGap),
                         child: TrendingSection(
                           products: state.trending,
                           scrollNotifier: _scrollNotifier,
@@ -383,7 +386,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           delay: const Duration(milliseconds: 50),
                           fromOffset: const Offset(0, 0.12),
                           child: Padding(
-                            padding: EdgeInsets.only(bottom: r.h(20)),
+                            padding: EdgeInsets.only(bottom: sectionGap),
                             child: BrandTicker(
                               brands: state.brands,
                               scrollNotifier: _scrollNotifier,
@@ -505,62 +508,79 @@ class _SectionTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(r.w(20), r.h(12), r.w(20), r.h(14)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      padding: EdgeInsets.fromLTRB(r.w(20), r.h(10), r.w(20), r.h(12)),
+      child: Stack(
         children: [
-          // Overline row with decorative accent line
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
+          Positioned(
+            top: 0,
+            right: 0,
+            width: r.w(84),
+            height: r.h(44),
+            child: SparkleLayer(
+              color: accent.withValues(alpha: 0.9),
+              seed: title.hashCode,
+              count: 4,
+              maxSize: 5,
+              minOpacity: 0.012,
+              maxOpacity: 0.06,
+            ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                width: r.w(18),
-                height: r.h(2),
-                decoration: BoxDecoration(
-                  color: accent,
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-              SizedBox(width: r.w(8)),
-              Text(
-                overline,
-                style: TextStyle(
-                  color: accent,
-                  fontSize: r.sp(10.5),
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: 2.1,
-                ),
-              ),
-              const Spacer(),
               Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
-                    'See All',
-                    style: AppTextStyles.bodyM.copyWith(
-                      color: AppColors.textSecondary,
-                      fontSize: r.sp(12.5),
-                      fontWeight: FontWeight.w500,
+                  Container(
+                    width: r.w(20),
+                    height: r.h(2.2),
+                    decoration: BoxDecoration(
+                      color: accent,
+                      borderRadius: BorderRadius.circular(2),
                     ),
                   ),
-                  SizedBox(width: r.w(3)),
-                  Icon(
-                    Icons.arrow_forward_ios_rounded,
-                    color: AppColors.textMuted,
-                    size: r.sp(10),
+                  SizedBox(width: r.w(8)),
+                  Text(
+                    overline,
+                    style: TextStyle(
+                      color: accent,
+                      fontSize: r.sp(10.2),
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 1.9,
+                    ),
+                  ),
+                  const Spacer(),
+                  Row(
+                    children: [
+                      Text(
+                        'See All',
+                        style: AppTextStyles.bodyM.copyWith(
+                          color: AppColors.textSecondary,
+                          fontSize: r.sp(12.2),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      SizedBox(width: r.w(3)),
+                      Icon(
+                        Icons.arrow_forward_ios_rounded,
+                        color: AppColors.textMuted,
+                        size: r.sp(10),
+                      ),
+                    ],
                   ),
                 ],
               ),
+              SizedBox(height: r.h(5)),
+              Text(
+                title,
+                style: AppTextStyles.displayL.copyWith(
+                  color: AppColors.textPrimary,
+                  fontSize: r.sp(28.5),
+                  height: 1.05,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
             ],
-          ),
-          SizedBox(height: r.h(6)),
-          // Large editorial title
-          Text(
-            title,
-            style: AppTextStyles.displayL.copyWith(
-              color: AppColors.textPrimary,
-              fontSize: r.sp(29.5),
-              height: 1.04,
-            ),
           ),
         ],
       ),

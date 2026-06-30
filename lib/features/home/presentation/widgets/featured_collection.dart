@@ -4,6 +4,7 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_text_styles.dart';
 import '../../../../core/utils/responsive.dart';
 import 'scroll_reveal.dart';
+import 'sparkle_layer.dart';
 
 // Product images for the featured section
 class _FeaturedImg {
@@ -152,6 +153,16 @@ class _BigEditorialCardState extends State<_BigEditorialCard>
       child: Stack(
         clipBehavior: Clip.hardEdge,
         children: [
+          Positioned.fill(
+            child: SparkleLayer(
+              color: AppColors.champagne.withValues(alpha: 0.9),
+              seed: 77,
+              count: 7,
+              maxSize: 7,
+              minOpacity: 0.02,
+              maxOpacity: 0.09,
+            ),
+          ),
           // Atmospheric glow — top right
           Positioned(
             top: -r.h(20),
@@ -326,6 +337,16 @@ class _SmallCard extends StatelessWidget {
       child: Stack(
         clipBehavior: Clip.hardEdge,
         children: [
+          Positioned.fill(
+            child: SparkleLayer(
+              color: accent.withValues(alpha: 0.9),
+              seed: label.hashCode,
+              count: 4,
+              maxSize: 5,
+              minOpacity: 0.015,
+              maxOpacity: 0.07,
+            ),
+          ),
           // Product image framed as a premium object
           Positioned(
             right: r.w(8),

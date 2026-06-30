@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_text_styles.dart';
 import '../../../../core/utils/responsive.dart';
+import 'sparkle_layer.dart';
 
 // ── Hero Banner ────────────────────────────────────────────────────────────
 class HeroBanner extends StatefulWidget {
@@ -85,6 +86,7 @@ class _HeroBannerState extends State<HeroBanner> with TickerProviderStateMixin {
               itemBuilder: (_, i) => _HeroSlide(
                 data: widget.slides[i],
                 scrollOffset: scroll,
+                scrollVelocity: widget.scrollVelocity,
                 float: _float,
                 isActive: i == _page,
                 slideIndex: i,
@@ -155,6 +157,7 @@ class _HeroBannerState extends State<HeroBanner> with TickerProviderStateMixin {
 class _HeroSlide extends StatefulWidget {
   final Map<String, dynamic> data;
   final double scrollOffset;
+  final double scrollVelocity;
   final AnimationController float;
   final bool isActive;
   final int slideIndex;
@@ -163,6 +166,7 @@ class _HeroSlide extends StatefulWidget {
   const _HeroSlide({
     required this.data,
     required this.scrollOffset,
+    required this.scrollVelocity,
     required this.float,
     required this.isActive,
     required this.slideIndex,
@@ -208,6 +212,12 @@ class _HeroSlideState extends State<_HeroSlide>
     final productUrl = d['productUrl'] as String? ?? imageUrl;
     final emoji = d['emoji'] as String? ?? '✨';
     final scroll = widget.scrollOffset;
+    final xParallax =
+        (-widget.scrollOffset * 0.035 - widget.scrollVelocity * 2.0).clamp(
+          -24.0,
+          24.0,
+        ) +
+        math.sin((widget.scrollOffset * 0.01) + widget.slideIndex) * 4.0;
 
     return Stack(
       fit: StackFit.expand,
@@ -219,7 +229,7 @@ class _HeroSlideState extends State<_HeroSlide>
 
         // 2 — Background photo, softly washed into the layout
         Transform.translate(
-          offset: Offset(0, scroll * 0.18),
+          offset: Offset(xParallax, scroll * 0.18),
           child: Image.network(
             imageUrl,
             fit: BoxFit.cover,
@@ -241,6 +251,17 @@ class _HeroSlideState extends State<_HeroSlide>
                 colors: [accent.withValues(alpha: 0.08), Colors.transparent],
               ),
             ),
+          ),
+        ),
+
+        Positioned.fill(
+          child: SparkleLayer(
+            color: accent.withValues(alpha: 0.9),
+            seed: widget.slideIndex + 11,
+            count: 8,
+            maxSize: 8,
+            minOpacity: 0.015,
+            maxOpacity: 0.08,
           ),
         ),
 
@@ -303,6 +324,16 @@ class _HeroSlideState extends State<_HeroSlide>
                         accent: accent,
                         imageUrl: productUrl,
                         emoji: emoji,
+                      ),
+                      Positioned.fill(
+                        child: SparkleLayer(
+                          color: accent.withValues(alpha: 0.9),
+                          seed: widget.slideIndex + 41,
+                          count: 5,
+                          maxSize: 6,
+                          minOpacity: 0.02,
+                          maxOpacity: 0.09,
+                        ),
                       ),
                     ],
                   ),

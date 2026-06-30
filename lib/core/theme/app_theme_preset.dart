@@ -10,7 +10,7 @@ enum AppThemePreset {
   midToneSage,
 }
 
-const AppThemePreset activeThemePreset = AppThemePreset.nordicClean;
+const AppThemePreset activeThemePreset = AppThemePreset.globalEcommerce;
 
 @immutable
 class AppThemePalette {
